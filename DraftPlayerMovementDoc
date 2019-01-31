@@ -1,0 +1,50 @@
+Player state Pseudo Code
+#Player is probably a static body with locked rotation and high friction that the ARVR origin is a child of
+
+var lCon = left controller node
+var rCon = right controller node
+var vRCons = [lControl, rControl]
+#VRCon states are "none", "dashTrackStart", "dashTracking", "dashTrackEnd", "sword", "sheath"
+
+var dashTrackPositions = [Vector3(), Vector3()]
+var dashTrackVector = Vector3()
+
+
+func _some_process(delta):
+  #<COMB>
+  if is_action_just_pressed(someConTrigger):
+    Activate boundary #Boundary splitting left and right
+    if someConTrigger == left/right:
+      if lCon/rCon.state == "none"
+        lCon/rCon.state = "dashTrackStart"
+  elif is_action_just_released(someConTrigger):
+    if lCon/rCon.state == "dashTracking":
+    lCon/rCon.state == "dashTrackEnd"
+    
+  #TODO: Combine these two blocks between <COMB> into one for statement  
+  
+  for con in vRCons:
+    if con.state == "dashTrackStart":
+      dashTrackPositions[0] = con.translation #dashTrackPositions[0] is the initial position after the trigger is first pulled
+      con.state == "dashTracking"
+    
+    if con.state == "dashTracking":
+      dashTrackPositions[1] = con.translation
+      dashTrackVector = dashTrackPositions[1] - dashTrackPositions[0]
+      
+      #vvv For testing and debugging vvv
+      Stretch a model from dashTrackPositions[0] to dashTrackPositions[1]?
+    
+    if con.state == "dashTrackEnd":
+      wind_dash_check(dashTrackPositions)
+      
+    
+    #<COMB>
+
+
+func wind_dash(vecs):
+   var checkVec = vecs[1] - vecs[0]
+   
+   
+   
+    
