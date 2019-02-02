@@ -1,0 +1,17 @@
+This Game
+	Environment
+		Procedurally placed trees and boulders
+			Hills?
+	Player movement
+		Aimable wind-dash that refills on a timer
+		Refills if the player lands an attack
+		Aim by
+			Holding far button
+			"Dragging" opposite of the direction you 			want to go
+			Release during the drag
+		Dash has less friction if the player crouches down
+	Player attacks
+		Sword with sheath
+		Sword brings player close to enemies
+		Range is extended if it's a draw slash
+		Player must hit with the edge at a high hand speed 			and follow through if they want the hit to land

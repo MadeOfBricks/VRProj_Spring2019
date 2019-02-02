@@ -5,8 +5,9 @@ extends Area
 # var b = "textvar"
 
 func _ready():
+	print("Sword readied")
 	connect("body_entered",self,"_on_body_entered")
-	set_physics_process(true)
+	#set_physics_process(true)
 
 func _physics_process(delta):
 	pass
@@ -14,4 +15,5 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	print("BLAP")
 	print(body.name)
-	body.get_parent().queue_free()
+	if body.name.find("Coob") != -1:
+		body.queue_free()

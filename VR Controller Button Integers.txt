@@ -1,0 +1,5 @@
+Far button  1 
+Near button 7
+Stick press 14
+Trigger 15
+Grip 2
