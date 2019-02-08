@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scripts/Scene1.gd" type="Script" id=1]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=3]
 
 [node name="ARVROrigin" type="ARVROrigin"]
 
@@ -31,8 +30,6 @@ far = 100.0
 
 controller_id = 2
 _sections_unfolded = [ "Transform", "Visibility" ]
-
-[node name="GrippedSword" parent="OVRController2Right" index="1" instance=ExtResource( 3 )]
 
 [connection signal="button_pressed" from="OVRControllerLeft" to="OVRControllerLeft" method="_on_OVRControllerLeft_button_pressed"]
 

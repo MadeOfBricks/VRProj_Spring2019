@@ -54,13 +54,6 @@ func _process(delta):
 	visible = true
 	emit_signal(\"controller_activated\", self)
 
-
-func _on_OVRControllerLeft_button_pressed(button):
-	print(button)
-
-
-func _on_OVRController2Right_button_pressed(button):
-	print(button)
 "
 
 [node name="OVRController" type="ARVRController"]
