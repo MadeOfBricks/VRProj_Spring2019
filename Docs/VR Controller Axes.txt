@@ -1,0 +1,4 @@
+StickX 0
+StickY 1
+Trigger 2
+Grip ?

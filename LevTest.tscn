@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Packed/HitCoob.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
@@ -6,8 +6,9 @@
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=6]
+[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=7]
 
-[sub_resource type="Environment" id=4]
+[sub_resource type="Environment" id=1]
 
 background_mode = 1
 background_sky_custom_fov = 0.0
@@ -91,7 +92,7 @@ _sections_unfolded = [ "Ambient Light", "Background" ]
 radius = 1.19946
 height = 2.68525
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="CubeMesh" id=3]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 2, 2, 2 )
@@ -99,7 +100,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=4]
 
 render_priority = 0
 flags_transparent = false
@@ -166,7 +167,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.9778, 5.7639, 0 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="1"]
 
-environment = SubResource( 4 )
+environment = SubResource( 1 )
 
 [node name="Player" type="KinematicBody" parent="." index="2"]
 
@@ -246,9 +247,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 1 )
+mesh = SubResource( 3 )
 skeleton = NodePath("..")
-material/0 = SubResource( 3 )
+material/0 = SubResource( 4 )
 _sections_unfolded = [ "Transform", "material" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Ground" index="1"]
@@ -258,8 +259,22 @@ shape = SubResource( 5 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
+[node name="DebugTimer" type="Timer" parent="." index="4"]
+
+process_mode = 1
+wait_time = 0.5
+one_shot = false
+autostart = true
+script = ExtResource( 7 )
+
 [connection signal="button_pressed" from="Player/ARVROrigin/OVRControllerLeft" to="Player" method="_on_OVRControllerLeft_button_pressed"]
 
+[connection signal="button_release" from="Player/ARVROrigin/OVRControllerLeft" to="Player" method="_on_OVRControllerLeft_button_release"]
+
 [connection signal="button_pressed" from="Player/ARVROrigin/OVRControllerRight" to="Player" method="_on_OVRControllerRight_button_pressed"]
+
+[connection signal="button_release" from="Player/ARVROrigin/OVRControllerRight" to="Player" method="_on_OVRControllerRight_button_release"]
+
+[connection signal="timeout" from="DebugTimer" to="DebugTimer" method="_on_DebugTimer_timeout"]
 
 

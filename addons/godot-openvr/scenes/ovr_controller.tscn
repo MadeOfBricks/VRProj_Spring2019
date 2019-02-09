@@ -10,6 +10,8 @@ var ovr_render_model
 var components = Array()
 var ws = 0
 
+var axes
+
 func _ready():
 	# instance our render model object
 	ovr_render_model = preload(\"res://addons/godot-openvr/OpenVRRenderModel.gdns\").new()
@@ -53,6 +55,14 @@ func _process(delta):
 	# make it visible
 	visible = true
 	emit_signal(\"controller_activated\", self)
+
+func joystick_axes():
+	var stickArray = []
+	
+	for i in range(0,4):
+		stickArray.append(get_joystick_axis(i))
+	
+	return stickArray
 
 "
 

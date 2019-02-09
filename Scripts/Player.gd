@@ -12,6 +12,8 @@ var leftController
 var dir = Vector3()
 var vel = Vector3()
 
+var airJumps = 1
+
 var vRConButtons = {"FarButton":1,"NearButton":7,"StickPress":15,"Grip":2,"Trigger":15}
 
 func _ready():
@@ -23,7 +25,15 @@ func _physics_process(delta):
 	process_movement(delta)
 
 func process_input(delta):
-	pass
+	var dBTimer = get_parent().get_node("DebugTimer")
+	
+	var leftAxes = leftController.joystick_axes()
+	var rightAxes = rightController.joystick_axes()
+	var dBString = "Left: "
+	for i in range (0,4):
+		dBString += String(leftAxes[i]) + " "
+	
+	dBTimer.myText = dBString
 
 func process_movement(delta):
 	dir.y = 0
@@ -53,15 +63,32 @@ func process_movement(delta):
 
 
 func _on_OVRControllerLeft_button_pressed(button):
+	var delta = get_physics_process_delta_time()
 	print("Left click " + String(button))
+	VR_con_pressed(leftController,button,delta)
 
 
 
 func _on_OVRControllerRight_button_pressed(button):
 	var delta = get_physics_process_delta_time()
 	print("Right click " + String(button))
+	VR_con_pressed(rightController,button,delta)
+	
+	
+
+
+func _on_OVRControllerLeft_button_release(button):
+	pass # replace with function body
+
+
+func _on_OVRControllerRight_button_release(button):
+	pass # replace with function body
+
+func VR_con_pressed(controller,button,delta):
 	if button == vRConButtons["Trigger"]:
-		var dashVector = rightController.global_transform.basis.z.normalized()
-		vel = dashVector * -700 * delta
-	
-	
+		player_hop(controller,delta)
+
+
+func player_hop(controller,delta):
+	var dashVector = controller.global_transform.basis.z.normalized()
+	vel = dashVector * -700 * delta
