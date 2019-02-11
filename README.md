@@ -1,3 +1,11 @@
+Progress video 1: 
+https://youtu.be/hZD1iGMYgfo
+
+
+
+
+
+
 # Godot OpenVR GDNative module
 This module is provided as is, all files are contained within the addons/godot-openvr-asset folder
 
