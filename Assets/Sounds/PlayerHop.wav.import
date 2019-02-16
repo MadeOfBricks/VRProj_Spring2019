@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/PlayerHop.wav-2207dcd4de074c05c32d2ee214351042.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/PlayerHop.wav"
+dest_files=[ "res://.import/PlayerHop.wav-2207dcd4de074c05c32d2ee214351042.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

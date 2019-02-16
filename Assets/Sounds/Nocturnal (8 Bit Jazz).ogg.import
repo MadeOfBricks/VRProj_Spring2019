@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Nocturnal (8 Bit Jazz).ogg-dcb4c4cfc1bf69e3a41c9925dbad4e3f.oggstr"
+
+[deps]
+
+source_file="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg"
+dest_files=[ "res://.import/Nocturnal (8 Bit Jazz).ogg-dcb4c4cfc1bf69e3a41c9925dbad4e3f.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

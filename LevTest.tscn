@@ -1,12 +1,15 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://Packed/HitCoob.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Packed/CoobSet.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scripts/Scene1.gd" type="Script" id=3]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=6]
-[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=7]
+[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=6]
+[ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=7]
+[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=8]
+[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=9]
+[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=10]
 
 [sub_resource type="Environment" id=1]
 
@@ -124,7 +127,7 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = ExtResource( 6 )
+albedo_texture = ExtResource( 8 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
@@ -157,13 +160,16 @@ _sections_unfolded = [ "Albedo" ]
 
 extents = Vector3( 20.0283, 0.106169, 20.0483 )
 
+[sub_resource type="AudioStreamRandomPitch" id=6]
+
+audio_stream = ExtResource( 10 )
+random_pitch = 1.1
+
 [node name="Root" type="Spatial" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.20629, 0 )
 
-[node name="Coob" parent="." index="0" instance=ExtResource( 1 )]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.9778, 5.7639, 0 )
+[node name="Coobs" parent="." index="0" instance=ExtResource( 1 )]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="1"]
 
@@ -224,8 +230,22 @@ shape = SubResource( 2 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
+[node name="Sounds" type="Spatial" parent="Player" index="2"]
+
+script = ExtResource( 6 )
+
+[node name="Hop" type="AudioStreamPlayer" parent="Player/Sounds" index="0"]
+
+stream = ExtResource( 7 )
+volume_db = 1.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
 [node name="Ground" type="StaticBody" parent="." index="3"]
 
+editor/display_folded = true
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -265,7 +285,18 @@ process_mode = 1
 wait_time = 0.5
 one_shot = false
 autostart = true
-script = ExtResource( 7 )
+script = ExtResource( 9 )
+
+[node name="EnvironmentSounds" type="Spatial" parent="." index="5"]
+
+[node name="Music" type="AudioStreamPlayer" parent="EnvironmentSounds" index="0"]
+
+stream = SubResource( 6 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = true
+mix_target = 0
+bus = "Master"
 
 [connection signal="button_pressed" from="Player/ARVROrigin/OVRControllerLeft" to="Player" method="_on_OVRControllerLeft_button_pressed"]
 
