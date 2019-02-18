@@ -1,0 +1,10 @@
+When the lock-on button is hit, we need to
+  Get the direction that the ARVR origin is facing
+    Probably global_transform.basis.z
+  Get all the enemies
+  Get all the Y-Axis rotations required to make the ARVR origin face those enemies
+  Decide whether we're rotating the player left or right (dir) dependent on which button was pressed
+  Find the smallest dir-wards rotation required for the list of enemies
+  Rotate the origin by that much
+  Visual effect to indicate the enemy we've locked onto
+  
