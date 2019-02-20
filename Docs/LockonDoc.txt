@@ -1,0 +1,9 @@
+func some_lockon(delta):
+  var enArray = enemies.get_children()
+  var rotAngle
+  #THIS LINE
+  var curDir = current_transform.basis.xform(Vector3(0, 0, 1))
+  
+  
+  for en in enArray:
+    var tarDir = (en.translation - transform.origin ).normalized() #why transform.origin and not translation?
