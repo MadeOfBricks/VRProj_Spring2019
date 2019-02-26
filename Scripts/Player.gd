@@ -3,14 +3,19 @@ extends KinematicBody
 const GRAVITY = -24.8
 const MAX_SPEED = 20
 const JUMP_SPEED = 14
+const AIR_DASH_SPEED = 20
 const ACCEL = 4.5
-const DEACCEL = 12
+const GROUND_DEACCEL = 12
 const MAX_SLOPE_ANGLE = 40
 const NON_USE_VECTOR = Vector3(-999,-999,-999)
+
+var moveState = "stand"
 
 var rightController
 var leftController
 var sounds
+var enemies
+var lastLockedEnemy
 var dir = Vector3()
 var vel = Vector3()
 
@@ -30,6 +35,8 @@ func _ready():
 	rightController = $ARVROrigin/OVRControllerRight
 	leftController = $ARVROrigin/OVRControllerLeft
 	sounds = $Sounds
+	enemies = get_parent().get_node("Enemies")
+	
 
 func _physics_process(delta):
 	process_input(delta)
@@ -74,9 +81,16 @@ func process_input(delta):
 			tugging = true
 			tugVec[i+1] = thisCon.translation
 			
+			var dashVec = tugVec[i + 1] - tugVec[i]
+			if dashVec.length() > .4:
+				gust_dash(dashVec,delta)
+				
+				tugVec[i] = NON_USE_VECTOR
+				tugVec[i+1] = NON_USE_VECTOR
+			
+			
 			#Debug Text
-			var dBString = "Start: " + String(tugVec[i]) + "\nEnd: " + String(tugVec[i+1]) + "\nIndeces: " \
-			+ String(i) + "," + String(i+1)
+			var dBString = "Length: " + String(dashVec.length())
 			dBTimer.myText = dBString
 	
 	if tugging == false:
@@ -97,7 +111,15 @@ func process_movement(delta):
 	dir.y = 0
 	dir = dir.normalized()
 	
-	vel.y += delta*GRAVITY
+	var accel
+	
+	if moveState != "airDash":
+		vel.y += delta*GRAVITY
+	elif moveState == "airDash":
+		var ADT = $AirDashTimer
+		var dashTimerVelMult = ADT.time_left/(ADT.wait_time * .5)
+		vel = vel.normalized() * AIR_DASH_SPEED * clamp(dashTimerVelMult,0,1)
+		
 	
 	var hvel = vel
 	hvel.y = 0
@@ -105,11 +127,11 @@ func process_movement(delta):
 	var target = dir
 	target *= MAX_SPEED
 	
-	var accel
+	
 	if dir.dot(hvel)<0:
 		accel = ACCEL
-	elif is_on_floor():
-		accel = DEACCEL
+	elif is_on_floor() && moveState != "airDash":
+		accel = GROUND_DEACCEL
 	else:
 		accel = 0
 	
@@ -117,6 +139,36 @@ func process_movement(delta):
 	vel.x = hvel.x
 	vel.z = hvel.z
 	vel = move_and_slide(vel,Vector3(0,1,0), 0.05, 4, deg2rad(MAX_SLOPE_ANGLE))
+
+func gust_dash(dashVec,delta):
+	
+	if $AirDashTimer.is_stopped():
+		moveState = "airDash"
+		$AirDashTimer.start()
+		var vec = dashVec.normalized()
+		var magnitude = AIR_DASH_SPEED
+		vec *= magnitude * -1
+		vec = vec.rotated(Vector3(0,1,0),rotation.y)
+		
+		print("Magnitude " + String(magnitude))
+		
+		vel = vec
+	
+
+func _on_AirDashTimer_timeout():
+	vel = Vector3()
+	moveState = "stand"
+
+
+
+func tug_dash(dashVec,delta):
+	var vec = dashVec.normalized()
+	var magnitude = clamp(dashVec.length() * 30,0,200)
+	vec *= magnitude * -1
+	vec = vec.rotated(Vector3(0,1,0),rotation.y)
+	
+	
+	vel += vec
 
 
 
@@ -154,33 +206,21 @@ func VR_con_pressed(controller,button,delta):
 			tugIndex = 2
 		
 		tugVec[tugIndex] = controller.translation
-		
+	elif button == vRConButtons["NearButton"]:
+		#Lockon code goes here
+		pass
 
 func VR_con_released(controller,button,delta):
 	if button == vRConButtons["Trigger"]:
-		var dashVec = Vector3()
-		var index
+		var tugIndex
 		if controller == leftController:
-			index = 0
-		elif controller == rightController:
-			index = 2
-		
-		dashVec = tugVec[index + 1] - tugVec[index]
-		print("dashVec: " + String(dashVec))
-		
-		tug_dash(dashVec,delta)
-		
-		tugVec[index] = NON_USE_VECTOR
-		tugVec[index+1] = NON_USE_VECTOR
+			tugIndex = 0
+		if controller == rightController:
+			tugIndex = 2
+		tugVec[tugIndex] = NON_USE_VECTOR
+		tugVec[tugIndex+1] = NON_USE_VECTOR
 
-func tug_dash(dashVec,delta):
-	var vec = dashVec.normalized()
-	var magnitude = clamp(dashVec.length() * 30,0,200)
-	vec *= magnitude * -1
-	vec = vec.rotated(Vector3(0,1,0),rotation.y)
-	
-	
-	vel += vec
+
 
 #OLD MOVEMENT
 func player_hop(controller,delta):
@@ -188,3 +228,4 @@ func player_hop(controller,delta):
 	vel = dashVector * -700 * delta
 	sounds.play("Hop")
 	
+

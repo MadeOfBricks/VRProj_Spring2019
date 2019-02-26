@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/cloak.obj-f2a6cbc357a854e22536cc2bd17b36d7.mesh"
+
+[deps]
+
+files=[ "res://.import/cloak.obj-f2a6cbc357a854e22536cc2bd17b36d7.mesh" ]
+
+source_file="res://Assets/Lucas_project/Lucas project/cloak.obj"
+dest_files=[ "res://.import/cloak.obj-f2a6cbc357a854e22536cc2bd17b36d7.mesh", "res://.import/cloak.obj-f2a6cbc357a854e22536cc2bd17b36d7.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

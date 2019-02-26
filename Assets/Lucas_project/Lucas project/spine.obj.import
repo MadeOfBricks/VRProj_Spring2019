@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/spine.obj-04cdc07b91fc760b8e828f4de691b29d.mesh"
+
+[deps]
+
+files=[ "res://.import/spine.obj-04cdc07b91fc760b8e828f4de691b29d.mesh" ]
+
+source_file="res://Assets/Lucas_project/Lucas project/spine.obj"
+dest_files=[ "res://.import/spine.obj-04cdc07b91fc760b8e828f4de691b29d.mesh", "res://.import/spine.obj-04cdc07b91fc760b8e828f4de691b29d.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

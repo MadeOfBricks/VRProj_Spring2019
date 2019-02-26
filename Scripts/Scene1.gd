@@ -9,6 +9,7 @@ func _ready():
 	if arvr_interface and arvr_interface.initialize():
 		get_viewport().arvr = true
 		get_viewport().hdr = false
+	
 
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.

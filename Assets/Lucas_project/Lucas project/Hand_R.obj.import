@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Hand_R.obj-104e6ca075d00d8a7dfebb2986abc15b.mesh"
+
+[deps]
+
+files=[ "res://.import/Hand_R.obj-104e6ca075d00d8a7dfebb2986abc15b.mesh" ]
+
+source_file="res://Assets/Lucas_project/Lucas project/Hand_R.obj"
+dest_files=[ "res://.import/Hand_R.obj-104e6ca075d00d8a7dfebb2986abc15b.mesh", "res://.import/Hand_R.obj-104e6ca075d00d8a7dfebb2986abc15b.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

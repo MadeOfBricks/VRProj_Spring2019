@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/skull.obj-fb42ba8a2d0c464aa6e560eafda706b6.mesh"
+
+[deps]
+
+files=[ "res://.import/skull.obj-fb42ba8a2d0c464aa6e560eafda706b6.mesh" ]
+
+source_file="res://Assets/Lucas_project/Lucas project/skull.obj"
+dest_files=[ "res://.import/skull.obj-fb42ba8a2d0c464aa6e560eafda706b6.mesh", "res://.import/skull.obj-fb42ba8a2d0c464aa6e560eafda706b6.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
