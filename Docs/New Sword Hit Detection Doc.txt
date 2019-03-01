@@ -1,0 +1,34 @@
+****TEST A****
+Test whether we can be "too fast"
+  See if sword can just destroy on contact
+
+
+
+Sword moves
+  Check change in position on
+    Blade edge point (BEP)
+    Blade back edge point (BBEP)
+    Handle
+	
+To be a valid hit
+  Handle must travel X distance
+  Direction of movement of BEP must be opposite the direction
+  towards BBEP
+  angle_to must be greater than 150(to start off)
+
+So we always need to track
+  Previous blade handle position
+  Previous blade edge position
+  Previous back side of blade position
+
+Depending on how Test A goes
+  Frame where sword first contacts enemy body
+    Check for valid hit from last frame to this one
+  For every frame where sword is first in contact with enemy body
+    Check for valid hit form last frame to this one
+    Count every delta's worth of seconds we spend doing invalid hits
+  Frame where sword is no long contacting enemy body
+    Check for seconds spent doing invalid hits
+    If it exceeds some amount Z (let's start with .05 seconds, then
+    tweak it as necessary)
+	
