@@ -1,96 +1,18 @@
 [gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Packed/HitCoob.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
-[ext_resource path="res://Scripts/Scene1.gd" type="Script" id=3]
-[ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=6]
-[ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=7]
-[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=8]
-[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=9]
-[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=10]
+[ext_resource path="res://DefaultEnvironment.tres" type="Environment" id=2]
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Scene1.gd" type="Script" id=4]
+[ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=7]
+[ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=8]
+[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=9]
+[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=10]
+[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=11]
 
-[sub_resource type="Environment" id=1]
-
-background_mode = 1
-background_sky_custom_fov = 0.0
-background_color = Color( 0, 0.166016, 0.265625, 1 )
-background_energy = 0.0
-background_canvas_max_layer = 0
-ambient_light_color = Color( 1, 1, 1, 1 )
-ambient_light_energy = 0.5
-ambient_light_sky_contribution = 1.0
-fog_enabled = false
-fog_color = Color( 0.5, 0.6, 0.7, 1 )
-fog_sun_color = Color( 1, 0.9, 0.7, 1 )
-fog_sun_amount = 0.0
-fog_depth_enabled = true
-fog_depth_begin = 10.0
-fog_depth_curve = 1.0
-fog_transmit_enabled = false
-fog_transmit_curve = 1.0
-fog_height_enabled = false
-fog_height_min = 0.0
-fog_height_max = 100.0
-fog_height_curve = 1.0
-tonemap_mode = 0
-tonemap_exposure = 1.0
-tonemap_white = 1.0
-auto_exposure_enabled = false
-auto_exposure_scale = 0.4
-auto_exposure_min_luma = 0.05
-auto_exposure_max_luma = 8.0
-auto_exposure_speed = 0.5
-ss_reflections_enabled = false
-ss_reflections_max_steps = 64
-ss_reflections_fade_in = 0.15
-ss_reflections_fade_out = 2.0
-ss_reflections_depth_tolerance = 0.2
-ss_reflections_roughness = true
-ssao_enabled = false
-ssao_radius = 1.0
-ssao_intensity = 1.0
-ssao_radius2 = 0.0
-ssao_intensity2 = 1.0
-ssao_bias = 0.01
-ssao_light_affect = 0.0
-ssao_color = Color( 0, 0, 0, 1 )
-ssao_quality = 0
-ssao_blur = 3
-ssao_edge_sharpness = 4.0
-dof_blur_far_enabled = false
-dof_blur_far_distance = 10.0
-dof_blur_far_transition = 5.0
-dof_blur_far_amount = 0.1
-dof_blur_far_quality = 1
-dof_blur_near_enabled = false
-dof_blur_near_distance = 2.0
-dof_blur_near_transition = 1.0
-dof_blur_near_amount = 0.1
-dof_blur_near_quality = 1
-glow_enabled = false
-glow_levels/1 = false
-glow_levels/2 = false
-glow_levels/3 = true
-glow_levels/4 = false
-glow_levels/5 = true
-glow_levels/6 = false
-glow_levels/7 = false
-glow_intensity = 0.8
-glow_strength = 1.0
-glow_bloom = 0.0
-glow_blend_mode = 2
-glow_hdr_threshold = 1.0
-glow_hdr_scale = 2.0
-glow_bicubic_upscale = false
-adjustment_enabled = false
-adjustment_brightness = 1.0
-adjustment_contrast = 1.0
-adjustment_saturation = 1.0
-_sections_unfolded = [ "Ambient Light", "Background" ]
-
-[sub_resource type="CubeMesh" id=8]
+[sub_resource type="CubeMesh" id=1]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 1, 1, 20 )
@@ -98,7 +20,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=9]
+[sub_resource type="SpatialMaterial" id=2]
 
 render_priority = 0
 flags_transparent = false
@@ -150,7 +72,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="SpatialMaterial" id=3]
 
 render_priority = 0
 flags_transparent = false
@@ -202,12 +124,12 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[sub_resource type="CapsuleShape" id=2]
+[sub_resource type="CapsuleShape" id=4]
 
 radius = 1.19946
 height = 2.68525
 
-[sub_resource type="CubeMesh" id=3]
+[sub_resource type="CubeMesh" id=5]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 0.5, 0.5, 0.5 )
@@ -215,7 +137,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="CubeMesh" id=4]
+[sub_resource type="CubeMesh" id=6]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 2, 2, 2 )
@@ -223,7 +145,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=7]
 
 render_priority = 0
 flags_transparent = false
@@ -247,7 +169,7 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = ExtResource( 8 )
+albedo_texture = ExtResource( 9 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
@@ -276,20 +198,22 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[sub_resource type="BoxShape" id=6]
+[sub_resource type="BoxShape" id=8]
 
 extents = Vector3( 20.0283, 0.106169, 20.0483 )
 
-[sub_resource type="AudioStreamRandomPitch" id=7]
+[sub_resource type="AudioStreamRandomPitch" id=9]
 
-audio_stream = ExtResource( 10 )
+audio_stream = ExtResource( 11 )
 random_pitch = 1.1
 
-[node name="Root" type="Spatial" index="0"]
+[node name="Root" type="Spatial"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.20629, 0 )
 
 [node name="Enemies" type="Spatial" parent="." index="0"]
+
+editor/display_folded = true
 
 [node name="Coob" parent="Enemies" index="0" instance=ExtResource( 1 )]
 
@@ -305,10 +229,11 @@ transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 11, 1.5, 0 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="1"]
 
-environment = SubResource( 1 )
+environment = ExtResource( 2 )
 
 [node name="Player" type="KinematicBody" parent="." index="2"]
 
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.84789, 0 )
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -321,14 +246,14 @@ axis_lock_angular_x = false
 axis_lock_angular_y = false
 axis_lock_angular_z = false
 collision/safe_margin = 0.001
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="ARVROrigin" type="ARVROrigin" parent="Player" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.50455, 0 )
 world_scale = 1.0
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="ARVRCamera" type="ARVRCamera" parent="Player/ARVROrigin" index="0"]
@@ -365,9 +290,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 8 )
+mesh = SubResource( 1 )
 skeleton = NodePath("..")
-material/0 = SubResource( 9 )
+material/0 = SubResource( 2 )
 _sections_unfolded = [ "material" ]
 
 [node name="WeaveRightTarget" type="Spatial" parent="Player/ARVROrigin/ARVRCamera" index="1"]
@@ -388,34 +313,34 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 8 )
+mesh = SubResource( 1 )
 skeleton = NodePath("..")
-material/0 = SubResource( 10 )
+material/0 = SubResource( 3 )
 _sections_unfolded = [ "Transform", "material" ]
 
-[node name="OVRControllerLeft" parent="Player/ARVROrigin" index="1" instance=ExtResource( 4 )]
+[node name="OVRControllerLeft" parent="Player/ARVROrigin" index="1" instance=ExtResource( 5 )]
 
-[node name="OVRControllerRight" parent="Player/ARVROrigin" index="2" instance=ExtResource( 4 )]
+[node name="OVRControllerRight" parent="Player/ARVROrigin" index="2" instance=ExtResource( 5 )]
 
 controller_id = 2
 _sections_unfolded = [ "Transform", "Visibility" ]
 
-[node name="GrippedSword" parent="Player/ARVROrigin/OVRControllerRight" index="1" instance=ExtResource( 5 )]
+[node name="GrippedSword" parent="Player/ARVROrigin/OVRControllerRight" index="1" instance=ExtResource( 6 )]
 
 [node name="CollisionShape" type="CollisionShape" parent="Player" index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0, 0 )
-shape = SubResource( 2 )
+shape = SubResource( 4 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
 [node name="Sounds" type="Spatial" parent="Player" index="2"]
 
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="Hop" type="AudioStreamPlayer" parent="Player/Sounds" index="0"]
 
-stream = ExtResource( 7 )
+stream = ExtResource( 8 )
 volume_db = 1.0
 pitch_scale = 1.0
 autoplay = false
@@ -435,7 +360,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 3 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "Visibility" ]
@@ -447,7 +372,7 @@ wait_time = 0.3
 one_shot = true
 autostart = false
 
-[node name="Ground" type="StaticBody" parent="." index="3"]
+[node name="LevGround" type="StaticBody" parent="." index="3"]
 
 editor/display_folded = true
 input_ray_pickable = true
@@ -459,7 +384,7 @@ bounce = 0.0
 constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
 
-[node name="MeshInstance" type="MeshInstance" parent="Ground" index="0"]
+[node name="MeshInstance" type="MeshInstance" parent="LevGround" index="0"]
 
 transform = Transform( 20, 0, 0, 0, 0.1, 0, 0, 0, 20, 0, 0.224327, 0 )
 layers = 1
@@ -471,15 +396,15 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 4 )
+mesh = SubResource( 6 )
 skeleton = NodePath("..")
-material/0 = SubResource( 5 )
+material/0 = SubResource( 7 )
 _sections_unfolded = [ "Transform", "material" ]
 
-[node name="CollisionShape" type="CollisionShape" parent="Ground" index="1"]
+[node name="CollisionShape" type="CollisionShape" parent="LevGround" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.256514, 0 )
-shape = SubResource( 6 )
+shape = SubResource( 8 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
@@ -489,13 +414,13 @@ process_mode = 1
 wait_time = 0.1
 one_shot = false
 autostart = true
-script = ExtResource( 9 )
+script = ExtResource( 10 )
 
 [node name="EnvironmentSounds" type="Spatial" parent="." index="5"]
 
 [node name="Music" type="AudioStreamPlayer" parent="EnvironmentSounds" index="0"]
 
-stream = SubResource( 7 )
+stream = SubResource( 9 )
 volume_db = 0.0
 pitch_scale = 1.0
 autoplay = true
