@@ -34,6 +34,7 @@ var sticks = [leftStick,rightStick]
 var stickTurnReady = [true,true]
 
 var tugVec = [NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR]
+
 var weaveType = {"Left":1,"Right":2}
 var weaving = false
 var weaveSide = 0
@@ -62,9 +63,9 @@ func _physics_process(delta):
 
 func process_positions(delta):
 	#var dBString = ""
-	vRGearPosLog.Head.push_front($ARVROrigin/ARVRCamera.transform.origin)
-	vRGearPosLog.Right.push_front($ARVROrigin/OVRControllerRight.transform.origin)
-	vRGearPosLog.Left.push_front($ARVROrigin/OVRControllerLeft.transform.origin)
+	vRGearPosLog.Head.push_front($ARVROrigin/ARVRCamera.translation)
+	vRGearPosLog.Right.push_front($ARVROrigin/OVRControllerRight.translation)
+	vRGearPosLog.Left.push_front($ARVROrigin/OVRControllerLeft.translation)
 	
 	for gearPos in [vRGearPosLog.Head,vRGearPosLog.Right,vRGearPosLog.Left]:
 		#dBString += String(gearPos[0]) + "\n"
@@ -102,15 +103,22 @@ func process_input(delta):
 	#-------------------------------
 	#Weave-dashing
 	if weaving:
+		
 		var headLog = vRGearPosLog.Head
 		var headMovVec = headLog[1] - headLog[0]
+		var facingVec = headset.global_transform.basis.z.normalized()
 		
-		var rightVec = $ARVROrigin/ARVRCamera/WeaveRightTarget.translation \
-		- translation
 		
-		var leftVec = $ARVROrigin/ARVRCamera/WeaveLeftTarget.translation \
-		- translation
 		
+		var weaveCheckVec = Vector3(headMovVec.x,0,headMovVec.z)
+		var preRot = weaveCheckVec
+		weaveCheckVec = weaveCheckVec.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y))
+		
+		var rightVec = facingVec.rotated(Vector3(0,1,0),deg2rad(90))
+		
+		var leftVec = facingVec.rotated(Vector3(0,1,0),deg2rad(-90))
+		
+		var dBString = ""
 		
 		var tarVec
 		if weaveSide == weaveType.Left:
@@ -118,15 +126,22 @@ func process_input(delta):
 		elif weaveSide == weaveType.Right:
 			tarVec = leftVec
 		
-		
-		if abs(headMovVec.length()) > .025:
-			print( "Head doing: " + String(headMovVec))
-			print("Needs to do: " + String(tarVec))
-			print("Angular difference of " + String(rad2deg(headMovVec.angle_to(tarVec))))
-			if rad2deg(headMovVec.angle_to(tarVec)) < 45:
-				print("gud")
-				weave_dash(headMovVec,delta)
+		if abs(headMovVec.length()) > .02:
+			dBString += "Forward is: " + String(facingVec) + "\n"
+			dBString += ("Right is: " + String(rightVec)) + "\n"
+			dBString += ("Left is: " + String(leftVec)) + "\n"
+			dBString += ("Moving vec is: " + String(headMovVec)) + "\n"
 			
+			dBTimer.myText = dBString
+			
+			if rad2deg(weaveCheckVec.angle_to(tarVec)) < 45:
+				print("gud")
+				weave_dash(weaveCheckVec,delta)
+		
+		
+			
+	else:
+		dBTimer.myText = ""
 	#-------------------------------
 	
 	#-------------------------------
