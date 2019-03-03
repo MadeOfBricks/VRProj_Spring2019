@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Packed/HitCoob.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DefaultEnvironment.tres" type="Environment" id=2]
@@ -8,9 +8,11 @@
 [ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=7]
 [ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=8]
-[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=9]
-[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=10]
-[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=11]
+[ext_resource path="res://Assets/Sounds/GustDash.wav" type="AudioStream" id=9]
+[ext_resource path="res://Assets/Sounds/WeaveDash.wav" type="AudioStream" id=10]
+[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=11]
+[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=12]
+[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=13]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -169,7 +171,7 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = ExtResource( 9 )
+albedo_texture = ExtResource( 11 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
@@ -204,28 +206,50 @@ extents = Vector3( 20.0283, 0.106169, 20.0483 )
 
 [sub_resource type="AudioStreamRandomPitch" id=9]
 
-audio_stream = ExtResource( 11 )
+audio_stream = ExtResource( 13 )
 random_pitch = 1.1
 
-[node name="Root" type="Spatial"]
+[node name="Root" type="Spatial" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.20629, 0 )
 
 [node name="Enemies" type="Spatial" parent="." index="0"]
 
-editor/display_folded = true
-
 [node name="Coob" parent="Enemies" index="0" instance=ExtResource( 1 )]
 
-transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, -11, 1.5, 0 )
+transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, -15.6331, 1.52319, -0.0357103 )
 
-[node name="Coob2" parent="Enemies" index="1" instance=ExtResource( 1 )]
+[node name="Coob5" parent="Enemies" index="1" instance=ExtResource( 1 )]
 
-transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 1.5, -11 )
+transform = Transform( 0.434274, 0, 0.247802, 0, 1, 0, -0.247802, 0, 0.434274, -7.02097, 1.5, 4.57325 )
 
-[node name="Coob3" parent="Enemies" index="2" instance=ExtResource( 1 )]
+[node name="Coob7" parent="Enemies" index="2" instance=ExtResource( 1 )]
 
-transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 11, 1.5, 0 )
+transform = Transform( -0.139013, 0, -0.480287, 0, 1, 0, 0.480287, 0, -0.139013, -2.29811, 1.5, -14.3794 )
+
+[node name="Coob2" parent="Enemies" index="3" instance=ExtResource( 1 )]
+
+transform = Transform( -0.358772, 0, -0.348257, 0, 1, 0, 0.348257, 0, -0.358772, 13.3604, 1.5, -3.24199 )
+
+[node name="Coob4" parent="Enemies" index="4" instance=ExtResource( 1 )]
+
+transform = Transform( -0.139013, 0, -0.480287, 0, 1, 0, 0.480287, 0, -0.139013, 15.0593, 1.5, -5.68209 )
+
+[node name="Coob9" parent="Enemies" index="5" instance=ExtResource( 1 )]
+
+transform = Transform( -0.139013, 0, -0.480287, 0, 1, 0, 0.480287, 0, -0.139013, 5.20992, 1.5, -7.11334 )
+
+[node name="Coob3" parent="Enemies" index="6" instance=ExtResource( 1 )]
+
+transform = Transform( -0.358772, 0, -0.348257, 0, 1, 0, 0.348257, 0, -0.358772, -2.19419, 1.5, -3.47332 )
+
+[node name="Coob6" parent="Enemies" index="7" instance=ExtResource( 1 )]
+
+transform = Transform( -0.139013, 0, -0.480287, 0, 1, 0, 0.480287, 0, -0.139013, 9.54368, 1.5, 5.1782 )
+
+[node name="Coob8" parent="Enemies" index="8" instance=ExtResource( 1 )]
+
+transform = Transform( -0.139013, 0, -0.480287, 0, 1, 0, 0.480287, 0, -0.139013, -12.3146, 1.5, -7.93353 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="1"]
 
@@ -233,7 +257,6 @@ environment = ExtResource( 2 )
 
 [node name="Player" type="KinematicBody" parent="." index="2"]
 
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.84789, 0 )
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -347,6 +370,24 @@ autoplay = false
 mix_target = 0
 bus = "Master"
 
+[node name="GustDash" type="AudioStreamPlayer" parent="Player/Sounds" index="1"]
+
+stream = ExtResource( 9 )
+volume_db = -10.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="WeaveDash" type="AudioStreamPlayer" parent="Player/Sounds" index="2"]
+
+stream = ExtResource( 10 )
+volume_db = -15.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
 [node name="ShowZBasis" type="MeshInstance" parent="Player" index="3"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3 )
@@ -374,7 +415,6 @@ autostart = false
 
 [node name="LevGround" type="StaticBody" parent="." index="3"]
 
-editor/display_folded = true
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -414,14 +454,14 @@ process_mode = 1
 wait_time = 0.1
 one_shot = false
 autostart = true
-script = ExtResource( 10 )
+script = ExtResource( 12 )
 
 [node name="EnvironmentSounds" type="Spatial" parent="." index="5"]
 
 [node name="Music" type="AudioStreamPlayer" parent="EnvironmentSounds" index="0"]
 
 stream = SubResource( 9 )
-volume_db = 0.0
+volume_db = -20.0
 pitch_scale = 1.0
 autoplay = true
 mix_target = 0

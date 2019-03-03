@@ -10,6 +10,7 @@ const GROUND_DEACCEL = 12
 const WEAVE_DEACCEL = 4
 const MAX_SLOPE_ANGLE = 40
 const NON_USE_VECTOR = Vector3(-999,-999,-999)
+const NON_AUDIBLE_DB = -60
 
 var moveState = "stand"
 
@@ -38,6 +39,7 @@ var tugVec = [NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR]
 var weaveType = {"Left":1,"Right":2}
 var weaving = false
 var weaveSide = 0
+var weaveGain = -60
 
 func _ready():
 	dBTimer = get_parent().get_node("DebugTimer")
@@ -104,6 +106,11 @@ func process_input(delta):
 	#Weave-dashing
 	if weaving:
 		
+		#If sound not playing, start it inaudibly
+		if $Sounds/WeaveDash.playing == false:
+			$Sounds/WeaveDash.playing = true
+			$Sounds/WeaveDash.volume_db = -60
+			
 		var headLog = vRGearPosLog.Head
 		var headMovVec = headLog[1] - headLog[0]
 		var facingVec = headset.global_transform.basis.z.normalized()
@@ -114,34 +121,52 @@ func process_input(delta):
 		var preRot = weaveCheckVec
 		weaveCheckVec = weaveCheckVec.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y))
 		
+		
 		var rightVec = facingVec.rotated(Vector3(0,1,0),deg2rad(90))
 		
 		var leftVec = facingVec.rotated(Vector3(0,1,0),deg2rad(-90))
 		
 		var dBString = ""
 		
-		var tarVec
-		if weaveSide == weaveType.Left:
-			tarVec = rightVec
-		elif weaveSide == weaveType.Right:
-			tarVec = leftVec
+		#Unimplemented side-specific weaving
+		if false:
+			var tarVec
+			if weaveSide == weaveType.Left:
+				tarVec = rightVec
+			elif weaveSide == weaveType.Right:
+				tarVec = leftVec
 		
+		var weAreWeaving = false;
 		if abs(headMovVec.length()) > .02:
-			dBString += "Forward is: " + String(facingVec) + "\n"
-			dBString += ("Right is: " + String(rightVec)) + "\n"
-			dBString += ("Left is: " + String(leftVec)) + "\n"
-			dBString += ("Moving vec is: " + String(headMovVec)) + "\n"
+			#dBString += "Forward is: " + String(facingVec) + "\n"
+			#dBString += ("Right is: " + String(rightVec)) + "\n"
+			#dBString += ("Left is: " + String(leftVec)) + "\n"
+			#dBString += ("Moving vec is: " + String(headMovVec)) + "\n"
 			
-			dBTimer.myText = dBString
+			#dBTimer.myText = dBString
 			
-			if rad2deg(weaveCheckVec.angle_to(tarVec)) < 45:
-				print("gud")
+			if rad2deg(weaveCheckVec.angle_to(rightVec)) < 45 || \
+			rad2deg(weaveCheckVec.angle_to(leftVec)) < 45:
+				#print("gud")
 				weave_dash(weaveCheckVec,delta)
+				weAreWeaving = true
+		
+		if weAreWeaving:
+			if $Sounds/WeaveDash.volume_db < -15:
+				$Sounds/WeaveDash.volume_db += 15
+			else:
+				$Sounds/WeaveDash.volume_db -= 1
 		
 		
 			
 	else:
-		dBTimer.myText = ""
+		if $Sounds/WeaveDash.playing:
+			if $Sounds/WeaveDash.volume_db > -60:
+				$Sounds/WeaveDash.volume_db -= 1
+			else:
+				$Sounds/WeaveDash.playing = false
+	
+	#Weave sound manager
 	#-------------------------------
 	
 	#-------------------------------
@@ -230,10 +255,12 @@ func process_movement(delta):
 	
 	if dir.dot(hvel)<0:
 		accel = ACCEL
-	elif is_on_floor() && moveState != "airDash" && !weaving:
+	elif is_on_floor() && moveState != "airDash":
 		accel = GROUND_DEACCEL
-	elif weaving:
-		accel = WEAVE_DEACCEL
+		if weaving:
+			accel = WEAVE_DEACCEL
+	#elif weaving:
+	#	accel = WEAVE_DEACCEL
 	else:
 		accel = 0
 	
@@ -261,6 +288,7 @@ func gust_dash(dashVec,delta):
 	
 	if $AirDashTimer.is_stopped():
 		moveState = "airDash"
+		sounds.play("GustDash")
 		$AirDashTimer.start()
 		var vec = dashVec.normalized()
 		var magnitude = AIR_DASH_SPEED
@@ -277,7 +305,7 @@ func _on_AirDashTimer_timeout():
 	moveState = "stand"
 
 
-
+#OLD V2
 func tug_dash(dashVec,delta):
 	var vec = dashVec.normalized()
 	var magnitude = clamp(dashVec.length() * 30,0,200)

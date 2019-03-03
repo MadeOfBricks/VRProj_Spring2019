@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/GustDash.wav-1b2982dd82975f039c6a61ab42624bd8.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/GustDash.wav"
+dest_files=[ "res://.import/GustDash.wav-1b2982dd82975f039c6a61ab42624bd8.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0
