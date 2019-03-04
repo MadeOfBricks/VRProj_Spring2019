@@ -2,7 +2,7 @@ Progress video 1:
 https://youtu.be/hZD1iGMYgfo
 
 Progress video 2:
-https://www.youtube.com/watch?v=iCHazgUvA7I&t=79s
+https://youtu.be/iCHazgUvA7I
 
 
 
