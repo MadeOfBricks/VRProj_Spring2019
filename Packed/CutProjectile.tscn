@@ -1,0 +1,15 @@
+[gd_scene format=2]
+
+[node name="Proj" type="Spatial"]
+
+editor/display_folded = true
+
+[node name="Start Point" type="Spatial" parent="." index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8117, 11.0211, -1.59302 )
+
+[node name="End Point" type="Spatial" parent="." index="1"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9744, 3.6809, 5.60917 )
+
+

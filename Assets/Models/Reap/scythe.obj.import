@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/scythe.obj-6f9e0f0dd70e649840d2ab11bec4b489.mesh"
+
+[deps]
+
+files=[ "res://.import/scythe.obj-6f9e0f0dd70e649840d2ab11bec4b489.mesh" ]
+
+source_file="res://Assets/Models/Reap/scythe.obj"
+dest_files=[ "res://.import/scythe.obj-6f9e0f0dd70e649840d2ab11bec4b489.mesh", "res://.import/scythe.obj-6f9e0f0dd70e649840d2ab11bec4b489.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

@@ -1,0 +1,25 @@
+Seeker pull
+	While mark visible
+	If mark is green
+	Tug with only one hand towards enemy
+	Move player to 
+	arm_length + sword_length - some_amount
+	distance away from the enemy
+	Remove mark
+
+
+Do we just warp, or dash and stop?
+	Dash and stop would feel cool
+	moveState of "homingDash"
+		during that move state, 
+		cannot mark new enemies
+		or unmark current ones
+		
+		Get direction towards enemy
+		Set speed and riection towards enemy
+			We may have to add a seperate point on their body to move towards
+		
+
+How do we implement air hang?
+Let's not worry about that
+Enemies can move along the ground for now
