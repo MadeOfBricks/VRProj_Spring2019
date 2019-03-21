@@ -13,43 +13,43 @@ func _on_BladeEdge_area_entered(area):
 		if hitStep == 0:
 			hitBody = area
 			hitStep = 1
-			print("Swrd 1")
+			#print("Swrd 1")
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 
 func _on_BladeEnd_area_entered(area):
 	if area == hitBody: 
 		if hitStep == 1:
 			hitStep = 2
-			print("Swrd 2")
+			#print("Swrd 2")
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 
 func _on_BladeEdge_area_exited(area):
 	if area == hitBody: 
 		if hitStep == 2:
 			hitStep = 3
-			print("Swrd 3")
+			#print("Swrd 3")
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 
 func _on_BladeEnd_area_exited(area):
 	if area == hitBody: 
 		if hitStep == 3:
 			hitStep = 0
-			print("Swrd End")
+			#print("Swrd End")
 			
 			if area.has_method("sword_hit"):
 				hit(area)
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 
 func _on_BladeEdge_body_entered(body):
@@ -61,41 +61,41 @@ func _on_BladeEdge_body_entered(body):
 		if hitStep == 0:
 			hitBody = body
 			hitStep = 1
-			print("Swrd 1")
+			#print("Swrd 1")
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 func _on_BladeEnd_body_entered(body):
 	if body == hitBody: 
 		if hitStep == 1:
 			hitStep = 2
-			print("Swrd 2")
+			#print("Swrd 2")
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 func _on_BladeEdge_body_exited(body):
 	if body == hitBody: 
 		if hitStep == 2:
 			hitStep = 3
-			print("Swrd 3")
+			#print("Swrd 3")
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 
 func _on_BladeEnd_body_exited(body):
 	if body == hitBody: 
 		if hitStep == 3:
 			hitStep = 0
-			print("Swrd End")
+			#print("Swrd End")
 			
 			if body.has_method("sword_hit"):
 				hit(body)
 		else:
 			hitStep = 0
-			print("Step Reset to " + String(hitStep))
+			#print("Step Reset to " + String(hitStep))
 
 
 func hit(body):

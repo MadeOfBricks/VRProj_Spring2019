@@ -38,7 +38,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector3( -6.70733e-008, 29.5018, -28.5785 ) ]
+"values": [ Vector3( 43.5754, 17.0447, 3.99318 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Meshes/Torso:rotation_degrees")
@@ -56,7 +56,7 @@ tracks/2/keys = {
 [sub_resource type="Animation" id=2]
 
 resource_name = "Resume Idle"
-length = 0.2
+length = 0.4
 loop = false
 step = 0.05
 tracks/0/type = "value"
@@ -66,7 +66,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.4 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Vector3( 3.15778, 4.83901, 0.0881578 ), Vector3( 0.0435477, 4.83901, 1.79948 ) ]
@@ -78,10 +78,10 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.4 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 1.30502, 88.4674, 11.8278 ), Vector3( -6.70733e-008, 29.5018, -28.5785 ) ]
+"values": [ Vector3( 1.30502, 88.4674, 11.8278 ), Vector3( 43.5754, 17.0447, 3.99318 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Meshes/Torso:rotation_degrees")
@@ -90,7 +90,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.4 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Vector3( 17.4454, 0, 0 ), Vector3( 0, 0, 0 ) ]
@@ -167,7 +167,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.4 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( -6.70733e-008, 29.5018, -28.5785 ), Vector3( 0, -75.3826, -28.5785 ) ]
+"values": [ Vector3( 43.5754, 17.0447, 3.99318 ), Vector3( 0, -75.3826, -28.5785 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Meshes/Torso:rotation_degrees")
@@ -194,12 +194,12 @@ tracks/3/keys = {
 "values": [ Vector3( 0, 7.23221, 0 ) ]
 }
 
-[sub_resource type="CapsuleShape" id=6]
+[sub_resource type="CapsuleShape" id=5]
 
 radius = 2.5
 height = 8.0
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=6]
 
 render_priority = 0
 flags_transparent = false
@@ -251,7 +251,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[node name="Reap" type="StaticBody" groups=[
+[node name="Reap" type="StaticBody" index="0" groups=[
 "hitable",
 ]]
 
@@ -284,7 +284,7 @@ _sections_unfolded = [ "Playback Options" ]
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 6.46464, 0 )
-shape = SubResource( 6 )
+shape = SubResource( 5 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
@@ -292,12 +292,12 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="GripHelper" type="Spatial" parent="Meshes" index="0"]
 
-transform = Transform( 0.764301, 0.416338, 0.492451, -0.478363, 0.878163, 1.17065e-009, -0.432452, -0.23557, 0.87034, 0.0435477, 4.83901, 1.79948 )
+transform = Transform( 0.967826, 0.134979, 0.212354, 0.0504504, 0.72271, -0.689308, -0.246513, 0.677844, 0.692647, 0.0435477, 4.83901, 1.79948 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Scythe" type="MeshInstance" parent="Meshes/GripHelper" index="0"]
 
-transform = Transform( 0, -1, -2.90573e-007, 8.9407e-008, 5.21541e-008, -1, 0.75, -5.96046e-008, 4.47035e-008, -6.88222, -1.62593, -2.12667 )
+transform = Transform( -2.98023e-008, -0.75, 7.45058e-009, -7.45058e-009, -2.23517e-008, -0.75, 0.5, -5.96046e-008, -2.98023e-008, -6.05417, -1.17486, -0.829648 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -374,7 +374,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = ExtResource( 5 )
 skeleton = NodePath("..")
-material/0 = SubResource( 5 )
+material/0 = SubResource( 6 )
 _sections_unfolded = [ "material" ]
 
 [node name="Skull" type="MeshInstance" parent="Meshes/Torso" index="1"]
@@ -433,5 +433,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.1767, 0 )
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.46464, 0 )
 _sections_unfolded = [ "Transform", "Visibility" ]
+
+[connection signal="timeout" from="RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
 
 

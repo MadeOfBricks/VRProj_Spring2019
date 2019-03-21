@@ -1,0 +1,74 @@
+Various states for various enemies
+	Strafing about and eyeing the player
+	Approaching the player for an up-close attack
+	Attacking the player up close
+	Attacking the player at range
+	Recovering from doing an attack
+	Retreating from the player after doing an up close attack
+	Flinching when being hit by a player attack
+	Dying
+	
+10 states
+	var states = ["HangBack","Approach", "RangedPrepare", "MeleePrepare", "MeleeAttack"
+	, "RangedAttack", "AttackRecovery","Retreat","Flinch", "Death"]
+
+When changing states, call a "swap_state(state)" function
+	Checks what we're doing, what we're about to have to do, and if
+	anything needs to be declared first
+
+When we turn towards the player
+	Have different turning speeds for each rate of turning
+	Do we want turning maximums?
+		Seems like it would be more trouble than worth
+
+
+HangBack
+	Get direction facing player + some angle left or right
+	Move in that direction
+	Update to face the player every 0.X seconds
+
+Approach
+	Create vector facing towards player, move along that vector
+	Update vector ever X or 0.X seconds, so the approach can be shaken off
+	If taking too long, or player too far, cancel back to HangBack
+	If getting close enough, MeleePrepare
+
+MeleePrepare
+	Move very slowly towards player
+		If at all
+	Wind back animation plays
+	After certain time, MeleeAttack
+
+RangedPrepare
+	Prepare to attack
+	Wind back animation 
+	Wait on a very short timer, then RangedAttack
+
+MeleeAttack
+	Attack animation plays
+	Create hitbox that fits with movement of scythe
+		Probably an area
+
+RangedAttack
+	Attack animatino players
+	Create hitbox that fits with movement of scythe and moves along vector
+		Probably an area
+
+AttackRecovery
+	Recovery animation plays
+		Probably "resume idle"
+	No movement, so the player has an oppurtunity to punish
+
+Retreat
+	Get direction away from player, plus slight angle
+	Move in that direction
+	Update to face player every 0.X seconds
+
+Flinch
+	Enemy stops moving
+	Play flinching animation, and remain in stopped flinch state for entirety of its duration
+
+Death
+	Play death animation
+	Remove collision nodes
+	After everything is cleaned up and all death sounds have been played, queue_free()

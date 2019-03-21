@@ -7,6 +7,9 @@ const JUMP_SPEED = 14
 const AIR_DASH_SPEED = 20
 const WEAVE_SPEED = 10
 const GUST_DASH_TUG_MIN = .4
+const HOMING_DASH_SPEED = 30
+const HOMING_DISTANCE_RANGE_MAX = 15
+const HOMING_DISTANCE_MIN = 5
 const ACCEL = 4.5
 const GROUND_DEACCEL = 12
 const AIR_DEACCEL = 6
@@ -91,6 +94,17 @@ func process_positions(delta):
 			$HitForHoming.global_transform.origin = headset.global_transform.origin + HFHVec
 	#-------------------------------
 	
+	#-------------------------------
+	#Distance to marked enemy
+	if markedEn != null:
+		var vec2En = markedEn.global_transform.origin - global_transform.origin
+		dBTimer.myText = String(vec2En.length())
+		if vec2En.length() < HOMING_DISTANCE_RANGE_MAX:
+			markedEn.get_node("Marker").use_mesh("green")
+		else:
+			markedEn.get_node("Marker").use_mesh("purple")
+	#-------------------------------
+	
 
 func process_input(delta):
 	
@@ -144,7 +158,7 @@ func process_input(delta):
 		
 		var dBString = ""
 		
-		#Unimplemented side-specific weaving
+		#Side-specific weaving (UNIMP)
 		if false:
 			var tarVec
 			if weaveSide == weaveType.Left:
@@ -154,12 +168,6 @@ func process_input(delta):
 		
 		var weAreWeaving = false;
 		if abs(headMovVec.length()) > .02:
-			#dBString += "Forward is: " + String(facingVec) + "\n"
-			#dBString += ("Right is: " + String(rightVec)) + "\n"
-			#dBString += ("Left is: " + String(leftVec)) + "\n"
-			#dBString += ("Moving vec is: " + String(headMovVec)) + "\n"
-			
-			#dBTimer.myText = dBString
 			
 			if rad2deg(weaveCheckVec.angle_to(rightVec)) < 45 || \
 			rad2deg(weaveCheckVec.angle_to(leftVec)) < 45:
@@ -211,20 +219,26 @@ func process_input(delta):
 	#-------------------------------
 	#One-handed gust homing dash
 	for i in [0,2]:
-		var vec
-		if i == 0:vec = leftVec
-		elif i == 2: vec = rightVec
-		
-		if markedEn != null:
-			if vec.length() > GUST_DASH_TUG_MIN:
-				homing_gust(markedEn)
-		 
-		
+		if tugVec[i] != NON_USE_VECTOR:
+			var vec
+			if i == 0:vec = leftVec
+			elif i == 2: vec = rightVec
+			
+			if markedEn != null:
+				var vec2Enemy = (markedEn.global_transform.origin - global_transform.origin)
+				var vec2EnemyRot = vec2Enemy.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y * -1))
+				dBTimer.myText = String(rad2deg(vec.angle_to(vec2EnemyRot)))
+				
+				if vec.length() > GUST_DASH_TUG_MIN \
+				&& vec.angle_to(vec2EnemyRot) < deg2rad(45):
+					homing_gust(markedEn)
+					tugVec[i] = NON_USE_VECTOR
+					tugVec[i+1] = NON_USE_VECTOR
 	#-------------------------------
 	#-------------------------------
 	#Two-handed gust dash
 	if gustPushing:
-		if leftVec.angle_to(rightVec) < 45:
+		if leftVec.angle_to(rightVec) < deg2rad(45):
 			var avgVec = (leftVec + rightVec)/2
 			
 			if avgVec.length() > GUST_DASH_TUG_MIN:
@@ -235,26 +249,6 @@ func process_input(delta):
 				
 	#-------------------------------
 	
-	#-------------------------------
-	#Tug dash (UNIMP)
-	if false:
-		var tugging = false
-		for i in [0,2]:
-			var thisCon
-			if i == 0: thisCon = leftController
-			elif i == 2: thisCon = rightController
-			if tugVec[i] != NON_USE_VECTOR:
-				
-				tugging = true
-				tugVec[i+1] = thisCon.translation#thisCon.global_transform.origin#thisCon.translation
-				
-				var dashVec = tugVec[i + 1] - tugVec[i]
-				if dashVec.length() > .4:
-					gust_dash(dashVec,delta)
-					
-					tugVec[i] = NON_USE_VECTOR
-					tugVec[i+1] = NON_USE_VECTOR
-	#-------------------------------
 	
 	
 	
@@ -264,10 +258,20 @@ func process_movement(delta):
 	dir.y = 0
 	dir = dir.normalized()
 	
+	if moveState == "homingDash":
+		var vec = (markedEn.global_transform.origin - global_transform.origin).normalized()
+		vec *= HOMING_DASH_SPEED
+		vel = vec
+		
+		var distVec = markedEn.global_transform.origin - global_transform.origin
+		if distVec.length() < HOMING_DISTANCE_MIN:
+			moveState = "stand"
+			markedEn = null
+	
 	
 	var accel
 	
-	if moveState != "airDash":
+	if moveState != "airDash" && moveState != "homingDash":
 		vel.y += delta*GRAVITY
 	elif moveState == "airDash":
 		var ADT = $AirDashTimer
@@ -283,17 +287,17 @@ func process_movement(delta):
 	
 	
 	
-	
-	
 	#if dir.dot(hvel)<0:
 	#	accel = ACCEL
 	#el
-	if is_on_floor() && moveState != "airDash":
+	if is_on_floor() && moveState != "airDash" && moveState != "homingDash":
 		accel = GROUND_DEACCEL
 		if weaving:
 			accel = WEAVE_DEACCEL
 	#elif weaving:
 	#	accel = WEAVE_DEACCEL
+	elif moveState == "hitFloat":
+		accel = GROUND_DEACCEL
 	else:
 		accel = 0
 	
@@ -309,6 +313,17 @@ func process_post_movement(delta):
 	for vec in tugVec:
 		if vec != NON_USE_VECTOR:
 			vec += vel
+
+func start_hit_float():
+	moveState = "hitFloat"
+	$HitFloatTimer.start()
+
+func homing_gust(enemy):
+	moveState = "homingDash"
+	sounds.play("GustDash")
+	var vec = (enemy.global_transform.origin - global_transform.origin).normalized()
+	vec *= HOMING_DASH_SPEED
+	vel = vec
 
 func weave_dash(dashVec,delta):
 	var vec = headset.global_transform.basis.z.normalized() * -1
@@ -391,7 +406,8 @@ func VR_con_pressed(controller,button,delta):
 			weaveSide = 2
 		weaving = true;
 	elif button == vRConButtons["FarButton"]:
-		mark_enemy()
+		if moveState != "homingDash":
+			mark_enemy()
 
 func VR_con_released(controller,button,delta):
 	if button == vRConButtons["Trigger"]:

@@ -5,7 +5,7 @@
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=3]
 [ext_resource path="res://Scripts/Scene1.gd" type="Script" id=4]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Packed/GrippedSwordOld.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=7]
 [ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=8]
 [ext_resource path="res://Assets/Sounds/GustDash.wav" type="AudioStream" id=9]
@@ -332,8 +332,6 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="GrippedSword" parent="Player/ARVROrigin/OVRControllerRight" index="1" instance=ExtResource( 6 )]
 
-transform = Transform( -2.18557e-008, 0.5, 0, -0.5, -2.18557e-008, 0, 0, 0, 0.6, 0, 0, 0.0483734 )
-
 [node name="CollisionShape" type="CollisionShape" parent="Player" index="1"]
 
 transform = Transform( 1, 0, 0, 0, -7.78286e-008, -1.78051, 0, 1, -4.37114e-008, 0, -2.51308, 0 )
@@ -380,8 +378,16 @@ wait_time = 0.3
 one_shot = true
 autostart = false
 
-[node name="HitForHoming" type="Area" parent="Player" index="4"]
+[node name="HitFloatTimer" type="Timer" parent="Player" index="4"]
 
+process_mode = 1
+wait_time = 0.5
+one_shot = true
+autostart = false
+
+[node name="HitForHoming" type="Area" parent="Player" index="5"]
+
+editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.91984, -2 )
 visible = false
 input_ray_pickable = false
@@ -468,8 +474,8 @@ _sections_unfolded = [ "Transform" ]
 [node name="DebugTimer" type="Timer" parent="." index="4"]
 
 process_mode = 1
-wait_time = 0.1
-one_shot = false
+wait_time = 0.5
+one_shot = true
 autostart = true
 script = ExtResource( 13 )
 
@@ -547,6 +553,8 @@ _sections_unfolded = [ "Light" ]
 [connection signal="button_release" from="Player/ARVROrigin/OVRControllerRight" to="Player" method="_on_OVRControllerRight_button_release"]
 
 [connection signal="timeout" from="Player/AirDashTimer" to="Player" method="_on_AirDashTimer_timeout"]
+
+[connection signal="timeout" from="Player/HitFloatTimer" to="Player" method="_on_AirDashTimer_timeout"]
 
 [connection signal="timeout" from="DebugTimer" to="DebugTimer" method="_on_DebugTimer_timeout"]
 
