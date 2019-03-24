@@ -11,9 +11,9 @@ extents = Vector3( 0.0182529, 0.0207867, 1.05923 )
 
 extents = Vector3( 0.0433467, 0.020787, 1.31715 )
 
-[node name="GrippedSword" type="Spatial" index="0"]
+[node name="GrippedSword" type="Spatial"]
 
-transform = Transform( -1.31134e-008, 0.5, 0, -0.3, -2.18557e-008, 0, 0, 0, 0.6, 0, 0, 0 )
+transform = Transform( -1.31134e-008, 0.5, 0, -0.3, -2.18557e-008, 0, 0, 0, 0.7, 0, 0, 0 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 

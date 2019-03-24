@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://Scripts/Reap.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Reap2.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Models/Reap/scythe.obj" type="ArrayMesh" id=2]
 [ext_resource path="res://Assets/Models/Reap/Hand_RHold.obj" type="ArrayMesh" id=3]
 [ext_resource path="res://Assets/Models/Reap/Hand_LHold.obj" type="ArrayMesh" id=4]
@@ -290,6 +290,8 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Meshes" type="Spatial" parent="." index="2"]
 
+editor/display_folded = true
+
 [node name="GripHelper" type="Spatial" parent="Meshes" index="0"]
 
 transform = Transform( 0.967826, 0.134979, 0.212354, 0.0504503, 0.722709, -0.689309, -0.246513, 0.677844, 0.692647, 0.0435477, 4.83901, 1.79948 )
@@ -394,15 +396,9 @@ skeleton = NodePath("..")
 material/0 = ExtResource( 7 )
 _sections_unfolded = [ "material" ]
 
-[node name="RemoveTimer" type="Timer" parent="." index="3"]
+[node name="Sounds" type="Spatial" parent="." index="3"]
 
-process_mode = 1
-wait_time = 1.0
-one_shot = false
-autostart = false
-
-[node name="Sounds" type="Spatial" parent="." index="4"]
-
+editor/display_folded = true
 script = ExtResource( 8 )
 
 [node name="Die" type="AudioStreamPlayer3D" parent="Sounds" index="0"]
@@ -425,15 +421,60 @@ attenuation_filter_cutoff_hz = 5000.0
 attenuation_filter_db = -24.0
 doppler_tracking = 0
 
-[node name="MarkerPoint" type="Spatial" parent="." index="5"]
+[node name="MarkerPoint" type="Spatial" parent="." index="4"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.1767, 0 )
 
-[node name="HomingPoint" type="Spatial" parent="." index="6"]
+[node name="HomingPoint" type="Spatial" parent="." index="5"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.46464, 0 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 
-[connection signal="timeout" from="RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
+[node name="Timers" type="Spatial" parent="." index="6"]
+
+[node name="DashCooldown" type="Timer" parent="Timers" index="0"]
+
+process_mode = 1
+wait_time = 1.5
+one_shot = true
+autostart = false
+
+[node name="RemoveTimer" type="Timer" parent="Timers" index="1"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="AttackStart" type="Timer" parent="Timers" index="2"]
+
+process_mode = 1
+wait_time = 0.8
+one_shot = true
+autostart = false
+
+[node name="AttackCooldown" type="Timer" parent="Timers" index="3"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = true
+autostart = false
+
+[node name="WaitToApproach" type="Timer" parent="Timers" index="4"]
+
+process_mode = 1
+wait_time = 5.0
+one_shot = true
+autostart = false
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+
+[connection signal="timeout" from="Timers/RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
+
+[connection signal="timeout" from="Timers/AttackStart" to="." method="_on_AttackStart_timeout"]
+
+[connection signal="timeout" from="Timers/AttackCooldown" to="." method="_on_AttackCooldown_timeout"]
+
+[connection signal="timeout" from="Timers/WaitToApproach" to="." method="_on_WaitToApproach_timeout"]
 
 

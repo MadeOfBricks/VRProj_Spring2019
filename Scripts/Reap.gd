@@ -14,7 +14,11 @@ func _ready():
 func _physics_process(delta):
 	pass#rotate(Vector3(0,1,0),.05)
 
+func state_change(state):
+	pass
+
 func sword_hit():
+	#TODO: Replace with state_change("flinch")
 	health-= 1
 	sounds.play("Die")
 	if health <= 0:

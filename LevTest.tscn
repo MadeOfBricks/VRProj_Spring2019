@@ -1,7 +1,7 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://DefaultEnvironment.tres" type="Environment" id=1]
-[ext_resource path="res://Packed/Reap1.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Packed/Reap2.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=3]
 [ext_resource path="res://Scripts/Scene1.gd" type="Script" id=4]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=5]
@@ -10,11 +10,10 @@
 [ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=8]
 [ext_resource path="res://Assets/Sounds/GustDash.wav" type="AudioStream" id=9]
 [ext_resource path="res://Assets/Sounds/WeaveDash.wav" type="AudioStream" id=10]
-[ext_resource path="res://Scripts/HitForHoming.gd" type="Script" id=11]
-[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=12]
-[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=13]
-[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=14]
-[ext_resource path="res://Packed/TerrainBlock.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=11]
+[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=12]
+[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=13]
+[ext_resource path="res://Packed/TerrainBlock.tscn" type="PackedScene" id=14]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -133,15 +132,6 @@ _sections_unfolded = [ "Albedo" ]
 radius = 0.5
 height = 1.0
 
-[sub_resource type="SphereMesh" id=5]
-
-custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-radius = 0.5
-height = 1.0
-radial_segments = 64
-rings = 32
-is_hemisphere = false
-
 [sub_resource type="CubeMesh" id=6]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
@@ -174,7 +164,7 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = ExtResource( 12 )
+albedo_texture = ExtResource( 11 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
@@ -209,7 +199,7 @@ extents = Vector3( 20.0283, 0.106169, 20.0483 )
 
 [sub_resource type="AudioStreamRandomPitch" id=9]
 
-audio_stream = ExtResource( 14 )
+audio_stream = ExtResource( 13 )
 random_pitch = 1.1
 
 [node name="Root" type="Spatial" index="0"]
@@ -226,15 +216,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Reap" parent="Enemies" index="0" instance=ExtResource( 2 )]
 
-transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 12, 0.670615, -1 )
-
-[node name="Reap2" parent="Enemies" index="1" instance=ExtResource( 2 )]
-
-transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.670615, -14 )
-
-[node name="Reap3" parent="Enemies" index="2" instance=ExtResource( 2 )]
-
-transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -12, 0.670615, -1 )
+transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, -16.302 )
 
 [node name="Player" type="KinematicBody" parent="." index="2"]
 
@@ -385,59 +367,8 @@ wait_time = 0.5
 one_shot = true
 autostart = false
 
-[node name="HitForHoming" type="Area" parent="Player" index="5"]
-
-editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.91984, -2 )
-visible = false
-input_ray_pickable = false
-input_capture_on_drag = false
-space_override = 0
-gravity_point = false
-gravity_distance_scale = 0.0
-gravity_vec = Vector3( 0, -1, 0 )
-gravity = 9.8
-linear_damp = 0.1
-angular_damp = 1.0
-priority = 0.0
-monitoring = true
-monitorable = true
-collision_layer = 1
-collision_mask = 1
-audio_bus_override = false
-audio_bus_name = "Master"
-reverb_bus_enable = false
-reverb_bus_name = "Master"
-reverb_bus_amount = 0.0
-reverb_bus_uniformity = 0.0
-script = ExtResource( 11 )
-_sections_unfolded = [ "Collision" ]
-
-[node name="CollisionShape" type="CollisionShape" parent="Player/HitForHoming" index="0"]
-
-shape = null
-disabled = false
-_sections_unfolded = [ "Transform" ]
-
-[node name="TestMesh" type="MeshInstance" parent="Player/HitForHoming" index="1"]
-
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
-skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
-
 [node name="LevGround" type="StaticBody" parent="." index="3"]
 
-editor/display_folded = true
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -477,7 +408,7 @@ process_mode = 1
 wait_time = 0.5
 one_shot = true
 autostart = true
-script = ExtResource( 13 )
+script = ExtResource( 12 )
 
 [node name="EnvironmentSounds" type="Spatial" parent="." index="5"]
 
@@ -486,7 +417,7 @@ script = ExtResource( 13 )
 stream = SubResource( 9 )
 volume_db = -20.0
 pitch_scale = 1.0
-autoplay = false
+autoplay = true
 mix_target = 0
 bus = "Master"
 
@@ -496,23 +427,23 @@ editor/display_folded = true
 transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="TerrainBlock" parent="Gazebo" index="0" instance=ExtResource( 15 )]
+[node name="TerrainBlock" parent="Gazebo" index="0" instance=ExtResource( 14 )]
 
 transform = Transform( 1, 0, 0, 0, 5, 0, 0, 0, 1, 0, 4.05728, 7.58023 )
 
-[node name="TerrainBlock3" parent="Gazebo" index="1" instance=ExtResource( 15 )]
+[node name="TerrainBlock3" parent="Gazebo" index="1" instance=ExtResource( 14 )]
 
 transform = Transform( 1, 0, 0, 0, 5, 0, 0, 0, 1, -0.0742464, 4.05728, 13.9573 )
 
-[node name="TerrainBlock2" parent="Gazebo" index="2" instance=ExtResource( 15 )]
+[node name="TerrainBlock2" parent="Gazebo" index="2" instance=ExtResource( 14 )]
 
 transform = Transform( 1, 0, 0, 0, 5, 0, 0, 0, 1, 11.2575, 4.05728, 7.58023 )
 
-[node name="TerrainBlock4" parent="Gazebo" index="3" instance=ExtResource( 15 )]
+[node name="TerrainBlock4" parent="Gazebo" index="3" instance=ExtResource( 14 )]
 
 transform = Transform( 1, 0, 0, 0, 5, 0, 0, 0, 1, 11.2984, 4.05728, 13.9923 )
 
-[node name="TerrainBlock5" parent="Gazebo" index="4" instance=ExtResource( 15 )]
+[node name="TerrainBlock5" parent="Gazebo" index="4" instance=ExtResource( 14 )]
 
 transform = Transform( 6.74583, 0, 0, 0, 0.408815, 0, 0, 0, 4.13502, 5.62435, 9.64941, 10.815 )
 
