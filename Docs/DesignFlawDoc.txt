@@ -1,0 +1,2 @@
+We are rotating the entire player node in the code when we could have just rotated a spacial node that was a parent of the ARVR origin
+  This is why we have to compensate for rotation in weave dash and such
