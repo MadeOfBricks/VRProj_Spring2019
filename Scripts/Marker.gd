@@ -19,9 +19,9 @@ func use_mesh(mesh):
 			for thisMesh in allMeshes:
 				thisMesh.visible = false
 			$Meshes/PurpleMesh.visible = true
-	elif mesh == "green":
-		if $Meshes/GreenMesh.visible == false:
+	elif mesh == "yellow":
+		if $Meshes/YellowMesh.visible == false:
 			for thisMesh in allMeshes:
 				thisMesh.visible = false
-			$Meshes/GreenMesh.visible = true
+			$Meshes/YellowMesh.visible = true
 		

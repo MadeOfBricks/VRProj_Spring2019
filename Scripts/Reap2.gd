@@ -6,7 +6,7 @@ const FLOAT_SPEED = 10
 const ROTATE_SPEED = .05
 const HANGBACK_MAX_DISTANCE = 40
 const HANGBACK_MIN_DISTANCE = 20
-const ATTACK_TRIGGER_DISTANCE_MIN = 10
+const ATTACK_TRIGGER_DISTANCE_MIN = 6
 const MELEE_PREPARE_DEACCEL = 2
 const DASH_SPEED = 40
 const ATTACK_DASH_SPEED = 60
@@ -17,6 +17,8 @@ var root
 var sounds
 var anim
 var player
+
+var preFlinchState = 0
 
 var health = 2
 
@@ -33,7 +35,7 @@ func _ready():
 	root = get_tree().get_root().get_node("Root")
 	anim = get_node("AnimationPlayer")
 	player = root.get_node("Player")
-	state_change(states.HangBack)
+	state_change(states.Approach)
 
 func _physics_process(delta):
 	process_state(delta)
@@ -81,19 +83,20 @@ func process_state(delta):
 			rotate_towards(player)
 			attackTargetVec = vecToPlayer
 			attackTargetVec.y = 0
+	
 		
 
 func process_movement(delta):
 	
 	#MeleePrepare state
-	#if myState == states.MeleePrepare:
-		#vel = vel.normalized() * (vel.length() - MELEE_PREPARE_DEACCEL)
+	if myState == states.MeleePrepare:
+		vel = vel.normalized() * (vel.length() - MELEE_PREPARE_DEACCEL)
 	
 	vel = vel.normalized() * (vel.length() - DEACCEL)
 	var thisFrameVel = vel * delta
 	translate(thisFrameVel)
 
-func state_change(state):
+func state_change(state,arg0 = null):
 	if state == states.Approach:
 		myState = state
 	elif state == states.HangBack:
@@ -104,12 +107,44 @@ func state_change(state):
 		$Timers/AttackStart.start()
 		myState = state
 	elif state == states.MeleeAttack:
-		
+		myState = state
 		anim.play("Swing")
 		$Timers/AttackCooldown.start()
 		dash(attackTargetVec,ATTACK_DASH_SPEED,true)
 	elif state == states.AttackRecovery:
 		anim.play("Resume Idle")
+	elif state == states.Flinch:
+		#Save previous state
+		preFlinchState = myState
+		myState = state
+		
+		#Flinch Movement
+		var hitVector = arg0
+		var awayVec = $Meshes/Torso/Skull.global_transform.origin - \
+		player.get_node("ARVROrigin/ARVRCamera").global_transform.origin 
+		var flinchVector = awayVec
+		dash(flinchVector,DASH_SPEED * .3,true)
+		var forwardVec = $Meshes.global_transform.basis.z.normalized()
+		var rightVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(-90))
+		var leftVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(90))
+		var rightAngDiff = hitVector.angle_to(rightVec)
+		var leftAngDiff = hitVector.angle_to(leftVec)
+		
+		var anims = ["FlinchR","FlinchL"]
+		if rightAngDiff < leftAngDiff:
+			anim.play(anims[0])
+		else:
+			anim.play(anims[1])
+		
+		#Reset timers and decrement health
+		$Timers.reset_all()
+		
+		health-= 1
+		sounds.play("Hit")
+		if health <= 0:
+			destroy()
+		
+		
 
 func dash(vec, speed,override = false):
 	if $Timers/DashCooldown.is_stopped() || override:
@@ -130,12 +165,11 @@ func rotate_towards(target):
 		$Meshes.rotate(Vector3(0,1,0),sign(angleTo) * ROTATE_SPEED)
 
 
-func sword_hit():
+func sword_hit(hitVector):
 	#TODO: Replace with state_change("flinch")
-	health-= 1
-	sounds.play("Die")
-	if health <= 0:
-		destroy()
+	state_change(states.Flinch,hitVector)
+	
+	
 
 func destroy():
 	$CollisionShape.disabled = true
@@ -157,6 +191,10 @@ func _on_AttackCooldown_timeout():
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "Resume Idle":
 		state_change(states.HangBack)
+	if anim_name == "FlinchR" ||\
+	anim_name == "FlinchL":
+		
+		pass
 
 
 func _on_WaitToApproach_timeout():

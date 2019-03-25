@@ -8,15 +8,6 @@ func _ready():
 	# Initialization here
 	pass
 
-func _on_BladeEdge_area_entered(area):
-	if area.name == "HitForHoming":
-		if hitStep == 0:
-			hitBody = area
-			hitStep = 1
-			#print("Swrd 1")
-		else:
-			hitStep = 0
-			#print("Step Reset to " + String(hitStep))
 
 
 func _on_BladeEnd_area_entered(area):
@@ -92,12 +83,15 @@ func _on_BladeEnd_body_exited(body):
 			#print("Swrd End")
 			
 			if body.has_method("sword_hit"):
-				hit(body)
+				var vec = $SwordGrip/BladeEdge.global_transform.basis.x.normalized()
+				
+				
+				hit(body,vec)
 		else:
 			hitStep = 0
 			#print("Step Reset to " + String(hitStep))
 
 
-func hit(body):
-	body.sword_hit()
+func hit(body,hitVector):
+	body.sword_hit(hitVector)
 

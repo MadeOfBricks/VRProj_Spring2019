@@ -1,5 +1,7 @@
 extends KinematicBody
+
 var dBTimer
+var root
 
 const GRAVITY = -24.8
 const MAX_SPEED = 20
@@ -50,9 +52,11 @@ var weaving = false
 var weaveSide = 0
 var weaveGain = -60
 
-var markedEn = null
+var markedEn
+var markedEnName
 
 func _ready():
+	root = get_tree().get_root().get_node("Root")
 	dBTimer = get_parent().get_node("DebugTimer")
 	
 	headset = $ARVROrigin/ARVRCamera
@@ -85,29 +89,21 @@ func process_positions(delta):
 		if gearPos.size()>5:
 			gearPos.pop_back()
 	
-	#-------------------------------
-	#Set position for hitforhoming (UNIMP)
-	if false:
-		if markedEn != null:
-			var vec2Marked = markedEn.get_node("HomingPoint").global_transform.origin - headset.global_transform.origin
-			var HFHVec = vec2Marked.normalized() * HIT_FOR_HOMING_DISTANCE
-			$HitForHoming.global_transform.origin = headset.global_transform.origin + HFHVec
-	#-------------------------------
+	
 	
 	#-------------------------------
 	#Distance to marked enemy
 	if markedEn != null:
-		var vec2En = markedEn.global_transform.origin - global_transform.origin
-		dBTimer.myText = String(vec2En.length())
-		if vec2En.length() < HOMING_DISTANCE_RANGE_MAX:
-			markedEn.get_node("Marker").use_mesh("green")
-		else:
-			markedEn.get_node("Marker").use_mesh("purple")
+		if root.get_node("Enemies").get_node(markedEnName):
+			var vec2En = markedEn.global_transform.origin - global_transform.origin
+			if vec2En.length() < HOMING_DISTANCE_RANGE_MAX:
+				markedEn.get_node("Marker").use_mesh("green")
+			else:
+				markedEn.get_node("Marker").use_mesh("yellow")
 	#-------------------------------
 	
 
 func process_input(delta):
-	
 	#-------------------------------
 	#Stick variables and array
 	var leftAxes = leftController.joystick_axes()
@@ -225,15 +221,20 @@ func process_input(delta):
 			elif i == 2: vec = rightVec
 			
 			if markedEn != null:
-				var vec2Enemy = (markedEn.global_transform.origin - global_transform.origin)
-				var vec2EnemyRot = vec2Enemy.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y * -1))
-				dBTimer.myText = String(rad2deg(vec.angle_to(vec2EnemyRot)))
-				
-				if vec.length() > GUST_DASH_TUG_MIN \
-				&& vec.angle_to(vec2EnemyRot) < deg2rad(45):
-					homing_gust(markedEn)
-					tugVec[i] = NON_USE_VECTOR
-					tugVec[i+1] = NON_USE_VECTOR
+				if root.get_node("Enemies").has_node(markedEnName):
+					var randInt = rand_range(0,10)
+					var vec2Enemy = (markedEn.global_transform.origin - global_transform.origin)
+					var vec2EnemyRot = vec2Enemy.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y * -1))
+					
+					if vec.length() > GUST_DASH_TUG_MIN \
+					&& vec.angle_to(vec2EnemyRot) < deg2rad(45):
+						homing_gust(markedEn)
+						tugVec[i] = NON_USE_VECTOR
+						tugVec[i+1] = NON_USE_VECTOR
+						print("Homed on " + markedEn.name)
+				else:
+					print("Mark set to null")
+					markedEn = null
 	#-------------------------------
 	#-------------------------------
 	#Two-handed gust dash
@@ -249,10 +250,6 @@ func process_input(delta):
 				
 	#-------------------------------
 	
-	
-	
-	
-	
 
 func process_movement(delta):
 	dir.y = 0
@@ -266,7 +263,6 @@ func process_movement(delta):
 		var distVec = markedEn.global_transform.origin - global_transform.origin
 		if distVec.length() < HOMING_DISTANCE_MIN:
 			moveState = "stand"
-			markedEn = null
 	
 	
 	var accel
@@ -296,8 +292,8 @@ func process_movement(delta):
 			accel = WEAVE_DEACCEL
 	#elif weaving:
 	#	accel = WEAVE_DEACCEL
-	elif moveState == "hitFloat":
-		accel = GROUND_DEACCEL
+	#elif moveState == "hitFloat":
+	#	accel = GROUND_DEACCEL
 	else:
 		accel = 0
 	
@@ -363,7 +359,6 @@ func mark_enemy():
 	var closestEn
 	for vec in ensVecs:
 		var index = ensVecs.find(vec)
-		print("Angle to " + ens[index].name + " is " + String(rad2deg(facingVec.angle_to(vec))))
 		if leastAng == null:
 			leastAng = facingVec.angle_to(vec)
 			closestEn = ens[index]
@@ -371,18 +366,18 @@ func mark_enemy():
 			leastAng = facingVec.angle_to(vec)
 			closestEn = ens[index]
 	
-	print("Closest is " + closestEn.name)
 	
 	
 	
 	if closestEn != null && closestEn != markedEn:
 		var newMark = marker.instance()
-		closestEn.add_child(newMark)
 		if markedEn != null:
-			if markedEn.get_node("Marker"):
+			if markedEn.has_node("Marker"):
 				markedEn.get_node("Marker").queue_free()
+		closestEn.add_child(newMark)
 		markedEn = closestEn
-		
+		markedEnName = markedEn.name
+	
 		#Set collision mask for HitForHoming
 		#$HitForHoming/CollisionShape.shape = markedEn.get_node("CollisionShape").shape
 	

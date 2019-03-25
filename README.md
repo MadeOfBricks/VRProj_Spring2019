@@ -1,3 +1,5 @@
+Hand model by chrisroll on TurboSquid
+
 Progress video 1: 
 https://youtu.be/hZD1iGMYgfo
 

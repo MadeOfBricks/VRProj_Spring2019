@@ -132,7 +132,7 @@ _sections_unfolded = [ "Albedo" ]
 radius = 0.5
 height = 1.0
 
-[sub_resource type="CubeMesh" id=6]
+[sub_resource type="CubeMesh" id=5]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 2, 2, 2 )
@@ -140,7 +140,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=6]
 
 render_priority = 0
 flags_transparent = false
@@ -193,11 +193,11 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[sub_resource type="BoxShape" id=8]
+[sub_resource type="BoxShape" id=7]
 
 extents = Vector3( 20.0283, 0.106169, 20.0483 )
 
-[sub_resource type="AudioStreamRandomPitch" id=9]
+[sub_resource type="AudioStreamRandomPitch" id=8]
 
 audio_stream = ExtResource( 13 )
 random_pitch = 1.1
@@ -390,15 +390,15 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
-material/0 = SubResource( 7 )
+material/0 = SubResource( 6 )
 _sections_unfolded = [ "Transform", "material" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="LevGround" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.256514, 0 )
-shape = SubResource( 8 )
+shape = SubResource( 7 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
@@ -406,18 +406,18 @@ _sections_unfolded = [ "Transform" ]
 
 process_mode = 1
 wait_time = 0.5
-one_shot = true
-autostart = true
+one_shot = false
+autostart = false
 script = ExtResource( 12 )
 
 [node name="EnvironmentSounds" type="Spatial" parent="." index="5"]
 
 [node name="Music" type="AudioStreamPlayer" parent="EnvironmentSounds" index="0"]
 
-stream = SubResource( 9 )
+stream = SubResource( 8 )
 volume_db = -20.0
 pitch_scale = 1.0
-autoplay = true
+autoplay = false
 mix_target = 0
 bus = "Master"
 
