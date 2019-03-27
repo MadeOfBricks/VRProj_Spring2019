@@ -1,0 +1,11 @@
+How do we escalate the game?
+
+"GameManager" node
+  At start of game, have player in middle with no abilities available until they hit the "Begin" button
+    Probably in "Menu" mode
+  
+
+  When an enemy dies, signal the manager to check remaining number of enemies
+  If it hits zero, start countdown timer
+  At end of timer, reset scene
+  Regenerate environment every 2-3 rounds?
