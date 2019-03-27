@@ -1,0 +1,31 @@
+Need version of player for menus
+  var userMode
+    Can be "Menu","Game","GameMenu"
+  "Menu" used for just-menu scenes like the main menu
+    Sword cannot be drawn
+    Let's not be thinking about menu secrets at this point in development
+  "Game" for being in a level during gameplay
+    Usual player abilities and capabilities
+  "GameMenu" for bringing up the menu during gameplay
+    Sword is set to invisible, menu is brought up
+    Leave movement abilities available for now
+    Parent node of menu will be child of Player
+  Surface with menu buttons
+    Touch finger to button to highlight it
+    Raycast from head to a node on hand detects whether or not the hand is in/on menu surface
+      Raycast node on hand is under the fingers + some distance X
+      This node is an area
+    Each button has a collision area that extends X + some distance Y (maybe .4) behind the surface of the button
+    Probably not necessary to do the Sprint-Vector-Style quality of life menu
+    Interaction between hand node and menu button
+      Create "BaseButton" class with default values and todos
+    MainMenu
+      "Empty Grove"
+        Test scene with trees for movement demonstration
+        Training dummy that respawns at different locations
+        After hitting it at every location, a party hat appears on it?
+          Goddamnit man
+      "Hostile Grove"
+        Usual game mode
+        
+      
