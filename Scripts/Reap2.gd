@@ -32,7 +32,7 @@ var attackTargetVec = Vector3()
 
 func _ready():
 	sounds = $Sounds
-	root = get_tree().get_root().get_node("Root")
+	root = get_tree().get_root().get_child(0)
 	anim = get_node("AnimationPlayer")
 	player = root.get_node("Player")
 	state_change(states.Approach)
@@ -199,3 +199,10 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 
 func _on_WaitToApproach_timeout():
 	state_change(states.Approach)
+
+
+func _on_ScytheBlade_body_entered(body):
+	var timeString = String(OS.get_time().minute) + ":" + String(OS.get_time().second)
+	print("Scythe entered " + timeString)
+	if body.name == "Player":
+		sounds.play("Hit")

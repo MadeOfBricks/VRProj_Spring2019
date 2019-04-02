@@ -13,7 +13,7 @@ extents = Vector3( 0.0433467, 0.020787, 1.31715 )
 
 [node name="GrippedSword" type="Spatial"]
 
-transform = Transform( -2.18557e-008, 0.5, 0, -0.5, -2.18557e-008, 0, 0, 0, 0.8, 0, 0, 0 )
+transform = Transform( -4.37114e-008, 0.5, 0, -1, -2.18557e-008, 0, 0, 0, 0.8, 0, 0, 0 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 
@@ -40,7 +40,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="BladeEdge" type="Area" parent="SwordGrip" index="1"]
 
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.087095, 2.06956e-009, -1.26538 )
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.106484, 2.91708e-009, -1.26538 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0
@@ -71,7 +71,7 @@ disabled = false
 
 [node name="BladeEnd" type="Area" parent="SwordGrip" index="2"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.038119, -1.66624e-009, -1.26538 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0575078, -2.51375e-009, -1.26538 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0

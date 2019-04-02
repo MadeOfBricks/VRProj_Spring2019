@@ -52,35 +52,35 @@ func _on_BladeEdge_body_entered(body):
 		if hitStep == 0:
 			hitBody = body
 			hitStep = 1
-			#print("Swrd 1")
+			print("Swrd 1")
 		else:
 			hitStep = 0
-			#print("Step Reset to " + String(hitStep))
+			print("Step Reset to " + String(hitStep))
 
 func _on_BladeEnd_body_entered(body):
 	if body == hitBody: 
 		if hitStep == 1:
 			hitStep = 2
-			#print("Swrd 2")
+			print("Swrd 2")
 		else:
 			hitStep = 0
-			#print("Step Reset to " + String(hitStep))
+			print("Step Reset to " + String(hitStep))
 
 func _on_BladeEdge_body_exited(body):
 	if body == hitBody: 
 		if hitStep == 2:
 			hitStep = 3
-			#print("Swrd 3")
+			print("Swrd 3")
 		else:
 			hitStep = 0
-			#print("Step Reset to " + String(hitStep))
+			print("Step Reset to " + String(hitStep))
 
 
 func _on_BladeEnd_body_exited(body):
 	if body == hitBody: 
 		if hitStep == 3:
 			hitStep = 0
-			#print("Swrd End")
+			print("Swrd End")
 			
 			if body.has_method("sword_hit"):
 				var vec = $SwordGrip/BladeEdge.global_transform.basis.x.normalized()
@@ -89,7 +89,7 @@ func _on_BladeEnd_body_exited(body):
 				hit(body,vec)
 		else:
 			hitStep = 0
-			#print("Step Reset to " + String(hitStep))
+			print("Step Reset to " + String(hitStep))
 
 
 func hit(body,hitVector):

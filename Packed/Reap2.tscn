@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Reap2.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Models/Reap/scythe.obj" type="ArrayMesh" id=2]
@@ -10,7 +10,6 @@
 [ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=8]
 [ext_resource path="res://Assets/Sounds/BlockHit.wav" type="AudioStream" id=9]
 [ext_resource path="res://Scripts/TimersManager.gd" type="Script" id=10]
-[ext_resource path="res://Packed/SlashBox1.tscn" type="PackedScene" id=11]
 
 [sub_resource type="Animation" id=1]
 
@@ -307,7 +306,15 @@ tracks/3/keys = {
 radius = 2.5
 height = 8.0
 
-[sub_resource type="SpatialMaterial" id=8]
+[sub_resource type="BoxShape" id=8]
+
+extents = Vector3( 3.5, 0.4, 0.1 )
+
+[sub_resource type="BoxShape" id=9]
+
+extents = Vector3( 4, 1, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=10]
 
 render_priority = 0
 flags_transparent = false
@@ -402,7 +409,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="GripHelper" type="Spatial" parent="Meshes" index="0"]
 
-transform = Transform( 0.0308444, 0.0168013, 0.999383, 0.204918, 0.978514, -0.0227749, -0.978293, 0.205494, 0.0267388, 3.15778, 4.83901, 0.088158 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0435477, 4.83901, 1.79948 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Scythe" type="MeshInstance" parent="Meshes/GripHelper" index="0"]
@@ -421,6 +428,42 @@ mesh = ExtResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]
+
+[node name="ScytheBlade" type="Area" parent="Meshes/GripHelper/Scythe" index="0"]
+
+transform = Transform( 1, -2.13163e-014, 0, 7.10543e-015, 1, -2.96062e-016, 1.06581e-014, -5.9212e-016, 1, 12.4218, 0.210678, -2.05521 )
+input_ray_pickable = false
+input_capture_on_drag = false
+space_override = 0
+gravity_point = false
+gravity_distance_scale = 0.0
+gravity_vec = Vector3( 0, -1, 0 )
+gravity = 9.8
+linear_damp = 0.1
+angular_damp = 1.0
+priority = 0.0
+monitoring = true
+monitorable = true
+collision_layer = 1
+collision_mask = 1
+audio_bus_override = false
+audio_bus_name = "Master"
+reverb_bus_enable = false
+reverb_bus_name = "Master"
+reverb_bus_amount = 0.0
+reverb_bus_uniformity = 0.0
+
+[node name="CollisionShape" type="CollisionShape" parent="Meshes/GripHelper/Scythe/ScytheBlade" index="0"]
+
+transform = Transform( 0.837918, 0.818692, 1.52779e-009, -0.363863, 0.837918, 2.3298e-008, 1.24541e-008, -3.30255e-009, 1, 4.04504, 0.191361, 0.120884 )
+shape = SubResource( 8 )
+disabled = false
+
+[node name="CollisionShape2" type="CollisionShape" parent="Meshes/GripHelper/Scythe/ScytheBlade" index="1"]
+
+transform = Transform( 1, 0, 0, 0, 1, -2.96062e-016, 1.77636e-015, 1.18424e-015, 1, -2.79808, 1.71446, 0.0368843 )
+shape = SubResource( 9 )
+disabled = false
 
 [node name="HandR" type="Spatial" parent="Meshes/GripHelper" index="1"]
 
@@ -467,7 +510,7 @@ material/0 = null
 
 [node name="Torso" type="Spatial" parent="Meshes" index="1"]
 
-transform = Transform( 1, 0, 0, 0, 0.954003, -0.299797, 0, 0.299797, 0.954003, 0, 7.23221, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.23221, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cloak" type="MeshInstance" parent="Meshes/Torso" index="0"]
@@ -484,7 +527,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = ExtResource( 5 )
 skeleton = NodePath("..")
-material/0 = SubResource( 8 )
+material/0 = SubResource( 10 )
 _sections_unfolded = [ "material" ]
 
 [node name="Skull" type="MeshInstance" parent="Meshes/Torso" index="1"]
@@ -584,11 +627,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.9441, 10.8812, -1.97133 )
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.0875, 3.80727, 5.12548 )
 
-[node name="MeshInstance" parent="." index="9" instance=ExtResource( 11 )]
-
-transform = Transform( -0.86369, 5.34745e-008, 0.504024, 0.504024, -8.18163e-008, 0.86369, 8.74228e-008, 1, 4.37114e-008, 0, 7.25957, 8.65529 )
-
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+
+[connection signal="body_entered" from="Meshes/GripHelper/Scythe/ScytheBlade" to="." method="_on_ScytheBlade_body_entered"]
 
 [connection signal="timeout" from="Timers/RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
 

@@ -17,7 +17,7 @@ func _physics_process(delta):
 func state_change(state):
 	pass
 
-func sword_hit():
+func sword_hit(hitVector):
 	#TODO: Replace with state_change("flinch")
 	health-= 1
 	sounds.play("Die")

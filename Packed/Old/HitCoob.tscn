@@ -1,9 +1,13 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/Reap.gd" type="Script" id=1]
-[ext_resource path="res://Assets/Textures/Texture1.png" type="Texture" id=2]
-[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=3]
-[ext_resource path="res://Assets/Sounds/BlockHit.wav" type="AudioStream" id=4]
+[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Sounds/BlockHit.wav" type="AudioStream" id=3]
+[ext_resource path="res://Assets/Textures/Texture1.png" type="Texture" id=4]
+
+[sub_resource type="BoxShape" id=3]
+
+extents = Vector3( 1, 1, 1 )
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -37,7 +41,7 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = ExtResource( 2 )
+albedo_texture = ExtResource( 4 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
@@ -66,10 +70,6 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo" ]
 
-[sub_resource type="BoxShape" id=3]
-
-extents = Vector3( 1, 1, 1 )
-
 [node name="Coob" type="StaticBody" groups=[
 "hitable",
 ]]
@@ -86,35 +86,19 @@ constant_angular_velocity = Vector3( 0, 0, 0 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Mesh" type="MeshInstance" parent="." index="0"]
-
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 1 )
-skeleton = NodePath("..")
-material/0 = SubResource( 2 )
-_sections_unfolded = [ "Transform", "material" ]
-
-[node name="CollisionShape" type="CollisionShape" parent="." index="1"]
+[node name="CollisionShape" type="CollisionShape" parent="." index="0"]
 
 shape = SubResource( 3 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="EntitySounds" type="Spatial" parent="." index="2"]
+[node name="Sounds" type="Spatial" parent="." index="1"]
 
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 
-[node name="Die" type="AudioStreamPlayer3D" parent="EntitySounds" index="0"]
+[node name="Die" type="AudioStreamPlayer3D" parent="Sounds" index="0"]
 
-stream = ExtResource( 4 )
+stream = ExtResource( 3 )
 attenuation_model = 0
 unit_db = 0.5
 unit_size = 1.0
@@ -132,12 +116,30 @@ attenuation_filter_cutoff_hz = 5000.0
 attenuation_filter_db = -24.0
 doppler_tracking = 0
 
-[node name="RemoveTimer" type="Timer" parent="." index="3"]
+[node name="RemoveTimer" type="Timer" parent="." index="2"]
 
 process_mode = 1
 wait_time = 1.0
 one_shot = false
 autostart = false
+
+[node name="Meshes" type="Spatial" parent="." index="3"]
+
+[node name="Mesh" type="MeshInstance" parent="Meshes" index="0"]
+
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 1 )
+skeleton = NodePath("..")
+material/0 = SubResource( 2 )
+_sections_unfolded = [ "Transform", "material" ]
 
 [connection signal="timeout" from="RemoveTimer" to="." method="_on_RemoveTimer_timeout"]
 

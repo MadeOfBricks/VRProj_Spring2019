@@ -86,5 +86,6 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = null
 skeleton = NodePath("..")
+_sections_unfolded = [ "Transform" ]
 
 

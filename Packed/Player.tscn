@@ -1,0 +1,422 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Scene1.gd" type="Script" id=2]
+[ext_resource path="res://addons/godot-openvr/scenes/ovr_controller.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Packed/HandMesh.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Packed/GrippedSword.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=6]
+[ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=7]
+[ext_resource path="res://Assets/Sounds/GustDash.wav" type="AudioStream" id=8]
+[ext_resource path="res://Assets/Sounds/WeaveDash.wav" type="AudioStream" id=9]
+
+[sub_resource type="CubeMesh" id=1]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+size = Vector3( 1, 1, 20 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="SpatialMaterial" id=2]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0, 0.0625, 1, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Albedo" ]
+
+[sub_resource type="SpatialMaterial" id=3]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 1, 0, 0, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Albedo" ]
+
+[sub_resource type="GDScript" id=4]
+
+script/source = "extends ARVRController
+
+signal controller_activated(controller)
+
+var ovr_render_model
+var components = Array()
+var ws = 0
+
+var axes
+
+func _ready():
+	# instance our render model object
+	ovr_render_model = preload(\"res://addons/godot-openvr/OpenVRRenderModel.gdns\").new()
+	
+	# hide to begin with
+	visible = false
+
+func apply_world_scale():
+	var new_ws = ARVRServer.world_scale
+	if (ws != new_ws):
+		ws = new_ws
+		$Controller_mesh.scale = Vector3(ws, ws, ws)
+
+func load_controller_mesh(controller_name):
+	if ovr_render_model.load_model(controller_name.substr(0, controller_name.length()-2)):
+		return ovr_render_model
+	
+	if ovr_render_model.load_model(\"generic_controller\"):
+		return ovr_render_model
+	
+	return Mesh.new()
+
+func _process(delta):
+	if !get_is_active():
+		visible = false
+		return
+	
+	# always set our world scale, user may end up changing this
+	apply_world_scale()
+	
+	if visible:
+		return
+	
+	# became active? lets handle it...
+	var controller_name = get_controller_name()
+	print(\"Controller \" + controller_name + \" became active\")
+			
+	# attempt to load a mesh for this
+	$Controller_mesh.mesh = load_controller_mesh(controller_name)
+			
+	# make it visible
+	visible = true
+	emit_signal(\"controller_activated\", self)
+
+func joystick_axes():
+	var stickArray = []
+	
+	for i in range(0,4):
+		stickArray.append(get_joystick_axis(i))
+	
+	return stickArray
+
+"
+
+[sub_resource type="SpatialMaterial" id=5]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.375, 0.375, 0.375, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Albedo" ]
+
+[sub_resource type="CapsuleShape" id=6]
+
+radius = 0.5
+height = 1.0
+
+[node name="Player" type="KinematicBody"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.84789, 0 )
+input_ray_pickable = true
+input_capture_on_drag = false
+collision_layer = 1
+collision_mask = 1
+axis_lock_linear_x = false
+axis_lock_linear_y = false
+axis_lock_linear_z = false
+axis_lock_angular_x = false
+axis_lock_angular_y = false
+axis_lock_angular_z = false
+collision/safe_margin = 0.001
+script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="ARVROrigin" type="ARVROrigin" parent="." index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.29652, 0 )
+world_scale = 1.0
+script = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="ARVRCamera" type="ARVRCamera" parent="ARVROrigin" index="0"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.03161 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+
+[node name="WeaveLeftTarget" type="Spatial" parent="ARVROrigin/ARVRCamera" index="0"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="MeshInstance" type="MeshInstance" parent="ARVROrigin/ARVRCamera/WeaveLeftTarget" index="0"]
+
+visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 1 )
+skeleton = NodePath("..")
+material/0 = SubResource( 2 )
+_sections_unfolded = [ "material" ]
+
+[node name="WeaveRightTarget" type="Spatial" parent="ARVROrigin/ARVRCamera" index="1"]
+
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="MeshInstance2" type="MeshInstance" parent="ARVROrigin/ARVRCamera/WeaveRightTarget" index="0"]
+
+visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 1 )
+skeleton = NodePath("..")
+material/0 = SubResource( 3 )
+_sections_unfolded = [ "Transform", "material" ]
+
+[node name="OVRControllerLeft" parent="ARVROrigin" index="1" instance=ExtResource( 3 )]
+
+script = SubResource( 4 )
+
+[node name="HandMesh2" parent="ARVROrigin/OVRControllerLeft" index="1" instance=ExtResource( 4 )]
+
+transform = Transform( 0.00671265, -0.00156157, 0.00122547, 0.00103954, -0.000916057, -0.0068615, -0.00169104, -0.00676183, 0.000646551, 0.0264202, 0.0687422, 0.0671581 )
+material/0 = SubResource( 5 )
+
+[node name="OVRControllerRight" parent="ARVROrigin" index="2" instance=ExtResource( 3 )]
+
+controller_id = 2
+script = SubResource( 4 )
+_sections_unfolded = [ "Transform", "Visibility" ]
+
+[node name="HandMesh" parent="ARVROrigin/OVRControllerRight" index="1" instance=ExtResource( 4 )]
+
+transform = Transform( -0.00679694, 0.000881932, -0.0014226, 0.00125125, -0.0012744, -0.00676833, -0.00111174, -0.00682628, 0.00107979, -0.0416175, 0.0728486, 0.0671581 )
+material/0 = SubResource( 5 )
+
+[node name="GrippedSword" parent="ARVROrigin/OVRControllerRight" index="2" instance=ExtResource( 5 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="." index="1"]
+
+transform = Transform( 1, 0, 0, 0, -7.78286e-008, -1.78051, 0, 1, -4.37114e-008, 0, -2.51308, 0 )
+shape = SubResource( 6 )
+disabled = false
+_sections_unfolded = [ "Transform" ]
+
+[node name="Sounds" type="Spatial" parent="." index="2"]
+
+editor/display_folded = true
+script = ExtResource( 6 )
+
+[node name="Hop" type="AudioStreamPlayer" parent="Sounds" index="0"]
+
+stream = ExtResource( 7 )
+volume_db = 1.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="GustDash" type="AudioStreamPlayer" parent="Sounds" index="1"]
+
+stream = ExtResource( 8 )
+volume_db = -10.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="WeaveDash" type="AudioStreamPlayer" parent="Sounds" index="2"]
+
+stream = ExtResource( 9 )
+volume_db = -15.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="AirDashTimer" type="Timer" parent="." index="3"]
+
+process_mode = 1
+wait_time = 0.3
+one_shot = true
+autostart = false
+
+[node name="HitFloatTimer" type="Timer" parent="." index="4"]
+
+process_mode = 1
+wait_time = 0.5
+one_shot = true
+autostart = false
+
+[connection signal="button_pressed" from="ARVROrigin/OVRControllerLeft" to="." method="_on_OVRControllerLeft_button_pressed"]
+
+[connection signal="button_release" from="ARVROrigin/OVRControllerLeft" to="." method="_on_OVRControllerLeft_button_release"]
+
+[connection signal="button_pressed" from="ARVROrigin/OVRControllerRight" to="." method="_on_OVRControllerRight_button_pressed"]
+
+[connection signal="button_release" from="ARVROrigin/OVRControllerRight" to="." method="_on_OVRControllerRight_button_release"]
+
+[connection signal="timeout" from="AirDashTimer" to="." method="_on_AirDashTimer_timeout"]
+
+[connection signal="timeout" from="HitFloatTimer" to="." method="_on_AirDashTimer_timeout"]
+
+

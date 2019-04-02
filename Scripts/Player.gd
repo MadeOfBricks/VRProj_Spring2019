@@ -22,6 +22,10 @@ const NON_AUDIBLE_DB = -60
 const HIT_FOR_HOMING_DISTANCE = 2
 
 var marker = preload("res://Packed/Marker.tscn")
+var gameMenu = preload("res://Packed/GameMenu.tscn")
+
+var uModes = {"Game":0,"Menu":1,"GameMenu":2,"Dead":3}
+var userMode
 
 var moveState = "stand"
 
@@ -45,6 +49,9 @@ var rightStick = Vector2()
 var sticks = [leftStick,rightStick]
 var stickTurnReady = [true,true]
 
+var loadGameMenu = [false,false]
+var loadedGameMenu = null
+
 var tugVec = [NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR]
 
 var weaveType = {"Left":1,"Right":2}
@@ -56,8 +63,17 @@ var markedEn
 var markedEnName
 
 func _ready():
-	root = get_tree().get_root().get_node("Root")
+	root = get_tree().get_root().get_child(0)
 	dBTimer = get_parent().get_node("DebugTimer")
+		
+	
+	if root.name == "RootMainMenu":
+		userMode = uModes.Menu
+	elif root.name == "RootLevel" || root.name == "RootPlayground" :
+		userMode = uModes.Game
+	
+	
+	
 	
 	headset = $ARVROrigin/ARVRCamera
 	rightController = $ARVROrigin/OVRControllerRight
@@ -115,140 +131,144 @@ func process_input(delta):
 	sticks[1] = rightStick
 	#-------------------------------
 	
-	#-------------------------------
-	#Stick turning
-	for i in range(0,2):
-		var stick = sticks[i]
-		var stickX = sticks[i].x
-		if abs(stickX) > .9:
-			if stickTurnReady[i]:
-				rotate_y(deg2rad(45) * sign(stickX) * -1)
-				stickTurnReady[i] = false
-		else:
-			stickTurnReady[i] = true
-	#-------------------------------
-	
-	#-------------------------------
-	#Weave-dashing
-	if weaving:
-		
-		#If sound not playing, start it inaudibly
-		if $Sounds/WeaveDash.playing == false:
-			$Sounds/WeaveDash.playing = true
-			$Sounds/WeaveDash.volume_db = -60
-			
-		var headLog = vRGearPosLog.Head
-		var headMovVec = headLog[1] - headLog[0]
-		var facingVec = headset.global_transform.basis.z.normalized()
-		
-		
-		
-		var weaveCheckVec = Vector3(headMovVec.x,0,headMovVec.z)
-		var preRot = weaveCheckVec
-		weaveCheckVec = weaveCheckVec.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y))
-		
-		
-		var rightVec = facingVec.rotated(Vector3(0,1,0),deg2rad(90))
-		
-		var leftVec = facingVec.rotated(Vector3(0,1,0),deg2rad(-90))
-		
-		var dBString = ""
-		
-		#Side-specific weaving (UNIMP)
-		if false:
-			var tarVec
-			if weaveSide == weaveType.Left:
-				tarVec = rightVec
-			elif weaveSide == weaveType.Right:
-				tarVec = leftVec
-		
-		var weAreWeaving = false;
-		if abs(headMovVec.length()) > .02:
-			
-			if rad2deg(weaveCheckVec.angle_to(rightVec)) < 45 || \
-			rad2deg(weaveCheckVec.angle_to(leftVec)) < 45:
-				if is_on_floor():
-					#print("gud")
-					weave_dash(weaveCheckVec,delta)
-					weAreWeaving = true
-		
-		if weAreWeaving:
-			if $Sounds/WeaveDash.volume_db < -15:
-				$Sounds/WeaveDash.volume_db += 15
+	if userMode == uModes.Game:
+		#-------------------------------
+		#Stick turning
+		for i in range(0,2):
+			var stick = sticks[i]
+			var stickX = sticks[i].x
+			if abs(stickX) > .9:
+				if stickTurnReady[i]:
+					rotate_y(deg2rad(45) * sign(stickX) * -1)
+					stickTurnReady[i] = false
 			else:
-				$Sounds/WeaveDash.volume_db -= 1
+				stickTurnReady[i] = true
+		#-------------------------------
 		
-		
+		#-------------------------------
+		#Weave-dashing
+		if weaving:
 			
-	else:
-		if $Sounds/WeaveDash.playing:
-			if $Sounds/WeaveDash.volume_db > -60:
-				$Sounds/WeaveDash.volume_db -= 1
-			else:
-				$Sounds/WeaveDash.playing = false
-	
-	#Weave sound manager
-	#-------------------------------
-	
-	#-------------------------------
-	#Management of tugVec array
-	var gustPushing = true
-	var leftVec
-	var rightVec
-	for i in [0,2]:
-		var thisCon
-		if i == 0: thisCon = leftController
-		elif i == 2: thisCon = rightController
-		
-		if tugVec[i] != NON_USE_VECTOR:
-			tugVec[i+1] = thisCon.translation
+			#If sound not playing, start it inaudibly
+			if $Sounds/WeaveDash.playing == false:
+				$Sounds/WeaveDash.playing = true
+				$Sounds/WeaveDash.volume_db = -60
+				
+			var headLog = vRGearPosLog.Head
+			var headMovVec = headLog[1] - headLog[0]
+			var facingVec = headset.global_transform.basis.z.normalized()
 			
-			if i == 0: 
-				leftVec = tugVec[i+1] - tugVec[i]
-			elif i == 2: 
-				rightVec = tugVec[i+1] - tugVec[i]
-		else:
-			gustPushing = false
-	
-	#-------------------------------
-	
-	#-------------------------------
-	#One-handed gust homing dash
-	for i in [0,2]:
-		if tugVec[i] != NON_USE_VECTOR:
-			var vec
-			if i == 0:vec = leftVec
-			elif i == 2: vec = rightVec
 			
-			if markedEn != null:
-				if root.get_node("Enemies").has_node(markedEnName):
-					var randInt = rand_range(0,10)
-					var vec2Enemy = (markedEn.global_transform.origin - global_transform.origin)
-					var vec2EnemyRot = vec2Enemy.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y * -1))
-					
-					if vec.length() > GUST_DASH_TUG_MIN \
-					&& vec.angle_to(vec2EnemyRot) < deg2rad(45):
-						homing_gust(markedEn)
-						tugVec[i] = NON_USE_VECTOR
-						tugVec[i+1] = NON_USE_VECTOR
-						print("Homed on " + markedEn.name)
+			
+			var weaveCheckVec = Vector3(headMovVec.x,0,headMovVec.z)
+			var preRot = weaveCheckVec
+			weaveCheckVec = weaveCheckVec.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y))
+			
+			
+			var rightVec = facingVec.rotated(Vector3(0,1,0),deg2rad(90))
+			
+			var leftVec = facingVec.rotated(Vector3(0,1,0),deg2rad(-90))
+			
+			var dBString = ""
+			
+			
+			var weAreWeaving = false;
+			if abs(headMovVec.length()) > .02:
+				
+				if rad2deg(weaveCheckVec.angle_to(rightVec)) < 45 || \
+				rad2deg(weaveCheckVec.angle_to(leftVec)) < 45:
+					if is_on_floor():
+						#print("gud")
+						weave_dash(weaveCheckVec,delta)
+						weAreWeaving = true
+			
+			if weAreWeaving:
+				if $Sounds/WeaveDash.volume_db < -15:
+					$Sounds/WeaveDash.volume_db += 15
 				else:
-					print("Mark set to null")
-					markedEn = null
-	#-------------------------------
-	#-------------------------------
-	#Two-handed gust dash
-	if gustPushing:
-		if leftVec.angle_to(rightVec) < deg2rad(45):
-			var avgVec = (leftVec + rightVec)/2
+					$Sounds/WeaveDash.volume_db -= 1
 			
-			if avgVec.length() > GUST_DASH_TUG_MIN:
-				gust_dash(avgVec,delta)
+			
 				
-				for i in range(0,4):
-					tugVec[i] = NON_USE_VECTOR
+		else:
+			if $Sounds/WeaveDash.playing:
+				if $Sounds/WeaveDash.volume_db > -60:
+					$Sounds/WeaveDash.volume_db -= 1
+				else:
+					$Sounds/WeaveDash.playing = false
+		
+		#Weave sound manager
+		#-------------------------------
+		
+		#-------------------------------
+		#Management of tugVec array
+		var gustPushing = true
+		var leftVec
+		var rightVec
+		for i in [0,2]:
+			var thisCon
+			if i == 0: thisCon = leftController
+			elif i == 2: thisCon = rightController
+			
+			if tugVec[i] != NON_USE_VECTOR:
+				tugVec[i+1] = thisCon.translation
 				
-	#-------------------------------
+				if i == 0: 
+					leftVec = tugVec[i+1] - tugVec[i]
+				elif i == 2: 
+					rightVec = tugVec[i+1] - tugVec[i]
+			else:
+				gustPushing = false
+		
+		#-------------------------------
+		
+		#-------------------------------
+		#One-handed gust homing dash
+		for i in [0,2]:
+			if tugVec[i] != NON_USE_VECTOR:
+				var vec
+				if i == 0:vec = leftVec
+				elif i == 2: vec = rightVec
+				
+				if markedEn != null:
+					if root.get_node("Enemies").has_node(markedEnName):
+						var randInt = rand_range(0,10)
+						var vec2Enemy = (markedEn.global_transform.origin - global_transform.origin)
+						var vec2EnemyRot = vec2Enemy.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y * -1))
+						
+						if vec.length() > GUST_DASH_TUG_MIN \
+						&& vec.angle_to(vec2EnemyRot) < deg2rad(45):
+							homing_gust(markedEn)
+							tugVec[i] = NON_USE_VECTOR
+							tugVec[i+1] = NON_USE_VECTOR
+							print("Homed on " + markedEn.name)
+					else:
+						print("Mark set to null")
+						markedEn = null
+		#-------------------------------
+		#-------------------------------
+		#Two-handed gust dash
+		if gustPushing:
+			if leftVec.angle_to(rightVec) < deg2rad(45):
+				var avgVec = (leftVec + rightVec)/2
+				
+				if avgVec.length() > GUST_DASH_TUG_MIN:
+					gust_dash(avgVec,delta)
+					
+					for i in range(0,4):
+						tugVec[i] = NON_USE_VECTOR
+					
+		#-------------------------------
+		
+		#-------------------------------
+		#Open menu
+		if loadedGameMenu == null:
+			if loadGameMenu[0] && loadGameMenu[1]:
+				var gMenu = gameMenu.instance()
+				add_child(gMenu)
+				loadedGameMenu = gMenu
+		#-------------------------------
+	
 	
 
 func process_movement(delta):
@@ -309,6 +329,11 @@ func process_post_movement(delta):
 	for vec in tugVec:
 		if vec != NON_USE_VECTOR:
 			vec += vel
+
+func game_menu_removed():
+	loadedGameMenu = null
+	userMode = uModes.Game
+
 
 func start_hit_float():
 	moveState = "hitFloat"
@@ -401,8 +426,16 @@ func VR_con_pressed(controller,button,delta):
 			weaveSide = 2
 		weaving = true;
 	elif button == vRConButtons["FarButton"]:
-		if moveState != "homingDash":
-			mark_enemy()
+		
+		if userMode == uModes.Game:
+			if controller == leftController:
+				loadGameMenu[0] = true
+			else:
+				loadGameMenu[1] = true
+			
+			if moveState != "homingDash":
+				mark_enemy()
+		
 
 func VR_con_released(controller,button,delta):
 	if button == vRConButtons["Trigger"]:
@@ -415,7 +448,14 @@ func VR_con_released(controller,button,delta):
 		tugVec[tugIndex+1] = NON_USE_VECTOR
 	elif button ==vRConButtons["NearButton"]:
 		weaving = 0;
-	
+	elif button == vRConButtons["FarButton"]:
+		if controller == leftController:
+			loadGameMenu[0] = false
+		else:
+			loadGameMenu[1] = false
+
+
+
 
 func _on_OVRControllerLeft_button_pressed(button):
 	var delta = get_physics_process_delta_time()
