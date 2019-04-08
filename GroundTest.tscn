@@ -4,7 +4,7 @@
 [ext_resource path="res://Scripts/RandomGroundTileTipping.gd" type="Script" id=2]
 [ext_resource path="res://Packed/Environment/GroundTile.tscn" type="PackedScene" id=3]
 
-[node name="Spatial" type="Spatial" index="0"]
+[node name="Spatial" type="Spatial"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="0"]
 

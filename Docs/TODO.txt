@@ -1,0 +1,13 @@
+TODO
+	Player health and death
+	Resize trees, give collision
+	Implement ranged enemies
+	Scoring system
+	Sounds for: Sheathing
+	Player heal and offensive ability (fireball, teleport, etc)
+
+MightDo
+	Enhanced visual effects
+	Enhanced sound effects
+	Redo sword collision
+	

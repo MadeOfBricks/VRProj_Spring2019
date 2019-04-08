@@ -1,17 +1,18 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://Packed/Reap2.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/GameManager.gd" type="Script" id=1]
 [ext_resource path="res://DefaultEnvironment.tres" type="Environment" id=2]
-[ext_resource path="res://Packed/Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=4]
-[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=5]
-[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=6]
-[ext_resource path="res://Packed/Tree2.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Packed/Tree3.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=3]
+[ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=4]
+[ext_resource path="res://Assets/Sounds/FinalHit.wav" type="AudioStream" id=5]
+[ext_resource path="res://Packed/Tree2.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Packed/Tree3.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=8]
+[ext_resource path="res://Packed/Player.tscn" type="PackedScene" id=9]
 
 [sub_resource type="AudioStreamRandomPitch" id=1]
 
-audio_stream = ExtResource( 5 )
+audio_stream = ExtResource( 4 )
 random_pitch = 1.1
 
 [sub_resource type="CubeMesh" id=2]
@@ -46,7 +47,7 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = ExtResource( 6 )
+albedo_texture = ExtResource( 8 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
@@ -83,15 +84,25 @@ extents = Vector3( 1, 1, 1 )
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.345118, 0 )
 
-[node name="Enemies" type="Spatial" parent="." index="0"]
+[node name="GameManager" type="Spatial" parent="." index="0"]
 
-[node name="Reap" parent="Enemies" index="0" instance=ExtResource( 1 )]
+script = ExtResource( 1 )
 
-transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -4.58956, 0, -12.1965 )
+[node name="PreWavePos" type="Spatial" parent="GameManager" index="0"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="1"]
+transform = Transform( 1, 0, 0, 0, 0.909043, 0.416702, 0, -0.416702, 0.909043, 0, 1.24977, -1.44595 )
 
-editor/display_folded = true
+[node name="NextWaveWait" type="Timer" parent="GameManager" index="1"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = true
+autostart = false
+
+[node name="Enemies" type="Spatial" parent="." index="1"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="2"]
+
 environment = ExtResource( 2 )
 
 [node name="Sun" type="DirectionalLight" parent="WorldEnvironment" index="0"]
@@ -122,19 +133,15 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
 _sections_unfolded = [ "Light" ]
 
-[node name="Player" parent="." index="2" instance=ExtResource( 3 )]
-
 [node name="DebugTimer" type="Timer" parent="." index="3"]
 
 process_mode = 1
 wait_time = 0.5
 one_shot = false
 autostart = false
-script = ExtResource( 4 )
+script = ExtResource( 3 )
 
 [node name="EnvironmentSounds" type="Spatial" parent="." index="4"]
-
-editor/display_folded = true
 
 [node name="Music" type="AudioStreamPlayer" parent="EnvironmentSounds" index="0"]
 
@@ -145,13 +152,29 @@ autoplay = false
 mix_target = 0
 bus = "Master"
 
+[node name="FinalHit" type="AudioStreamPlayer" parent="EnvironmentSounds" index="1"]
+
+stream = ExtResource( 5 )
+volume_db = -20.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
 [node name="EnvironmentFeatures" type="Spatial" parent="." index="5"]
 
-editor/display_folded = true
+[node name="Tree2" parent="EnvironmentFeatures" index="0" instance=ExtResource( 6 )]
 
-[node name="LevGround" type="StaticBody" parent="EnvironmentFeatures" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.757128, 0, 5.52251 )
+_sections_unfolded = [ "Transform" ]
 
-transform = Transform( 100, 0, 0, 0, 0.25, 0, 0, 0, 100, 0, 0, 0 )
+[node name="Tree3" parent="EnvironmentFeatures" index="1" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.154 )
+
+[node name="LevGround" type="StaticBody" parent="." index="6"]
+
+transform = Transform( 40.962, 0, 0, 0, 0.25, 0, 0, 0, 40.962, 0, 0, 0 )
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -162,7 +185,7 @@ constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="MeshInstance" type="MeshInstance" parent="EnvironmentFeatures/LevGround" index="0"]
+[node name="MeshInstance" type="MeshInstance" parent="LevGround" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.224327, 0 )
 layers = 1
@@ -179,20 +202,26 @@ skeleton = NodePath("..")
 material/0 = SubResource( 3 )
 _sections_unfolded = [ "Transform", "material" ]
 
-[node name="CollisionShape" type="CollisionShape" parent="EnvironmentFeatures/LevGround" index="1"]
+[node name="CollisionShape" type="CollisionShape" parent="LevGround" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.256514, 0 )
 shape = SubResource( 4 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="Tree2" parent="EnvironmentFeatures" index="1" instance=ExtResource( 7 )]
+[node name="HiCorner" type="Spatial" parent="LevGround" index="2"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.757128, 0, 5.52251 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00086, 7.62939e-006, 0.997036 )
+_sections_unfolded = [ "Transform" ]
 
-[node name="Tree3" parent="EnvironmentFeatures" index="2" instance=ExtResource( 8 )]
+[node name="LoCorner" type="Spatial" parent="LevGround" index="3"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.154 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00428, 0, -1.00509 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Player" parent="." index="7" instance=ExtResource( 9 )]
+
+[connection signal="timeout" from="GameManager/NextWaveWait" to="GameManager" method="_on_NextWaveWait_timeout"]
 
 [connection signal="timeout" from="DebugTimer" to="DebugTimer" method="_on_DebugTimer_timeout"]
 

@@ -7,11 +7,13 @@ const GRAVITY = -24.8
 const MAX_SPEED = 20
 const JUMP_SPEED = 14
 const AIR_DASH_SPEED = 20
+const AIR_DASH_MAX = 1
 const WEAVE_SPEED = 10
 const GUST_DASH_TUG_MIN = .4
 const HOMING_DASH_SPEED = 30
-const HOMING_DISTANCE_RANGE_MAX = 15
+const HOMING_DISTANCE_RANGE_MAX = 30
 const HOMING_DISTANCE_MIN = 5
+const HIT_AWAY_SPEED = 5
 const ACCEL = 4.5
 const GROUND_DEACCEL = 12
 const AIR_DEACCEL = 6
@@ -23,6 +25,7 @@ const HIT_FOR_HOMING_DISTANCE = 2
 
 var marker = preload("res://Packed/Marker.tscn")
 var gameMenu = preload("res://Packed/GameMenu.tscn")
+var packedSword = preload("res://Packed/GrippedSword.tscn")
 
 var uModes = {"Game":0,"Menu":1,"GameMenu":2,"Dead":3}
 var userMode
@@ -54,6 +57,10 @@ var loadedGameMenu = null
 
 var tugVec = [NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR]
 
+var availableAirDashes = AIR_DASH_MAX
+
+var homingDashReady = false
+
 var weaveType = {"Left":1,"Right":2}
 var weaving = false
 var weaveSide = 0
@@ -61,6 +68,10 @@ var weaveGain = -60
 
 var markedEn
 var markedEnName
+
+var swordSheathed = true
+var handsReadytoDraw = {"Left":false,"Right":false}
+var swordInHand = "None"
 
 func _ready():
 	root = get_tree().get_root().get_child(0)
@@ -113,9 +124,13 @@ func process_positions(delta):
 		if root.get_node("Enemies").get_node(markedEnName):
 			var vec2En = markedEn.global_transform.origin - global_transform.origin
 			if vec2En.length() < HOMING_DISTANCE_RANGE_MAX:
-				markedEn.get_node("Marker").use_mesh("green")
-			else:
 				markedEn.get_node("Marker").use_mesh("yellow")
+				homingDashReady = true
+			else:
+				homingDashReady = false
+				markedEn.get_node("Marker").use_mesh("purple")
+		else:
+			markedEn = null
 	#-------------------------------
 	
 
@@ -149,10 +164,11 @@ func process_input(delta):
 		#Weave-dashing
 		if weaving:
 			
-			#If sound not playing, start it inaudibly
-			if $Sounds/WeaveDash.playing == false:
-				$Sounds/WeaveDash.playing = true
-				$Sounds/WeaveDash.volume_db = -60
+			#If sound not playing, start it inaudibly (UNIMP)
+			if false:
+				if $Sounds/WeaveDash.playing == false:
+					$Sounds/WeaveDash.playing = true
+					$Sounds/WeaveDash.volume_db = -60
 				
 			var headLog = vRGearPosLog.Head
 			var headMovVec = headLog[1] - headLog[0]
@@ -181,21 +197,28 @@ func process_input(delta):
 						#print("gud")
 						weave_dash(weaveCheckVec,delta)
 						weAreWeaving = true
+						#Just play the sound
+						if !$Sounds/WeaveDash.playing:
+							$Sounds/WeaveDash.play()
 			
-			if weAreWeaving:
-				if $Sounds/WeaveDash.volume_db < -15:
-					$Sounds/WeaveDash.volume_db += 15
-				else:
-					$Sounds/WeaveDash.volume_db -= 1
+			#Dynamic WeaveDash volume (UNIMP)
+			if false:
+				if weAreWeaving:
+					if $Sounds/WeaveDash.volume_db < -15:
+						$Sounds/WeaveDash.volume_db += 15
+					else:
+						$Sounds/WeaveDash.volume_db -= 1
 			
 			
 				
 		else:
-			if $Sounds/WeaveDash.playing:
-				if $Sounds/WeaveDash.volume_db > -60:
-					$Sounds/WeaveDash.volume_db -= 1
-				else:
-					$Sounds/WeaveDash.playing = false
+			#Dynamically reduce weave dash volume (UNIMP)
+			if false:
+				if $Sounds/WeaveDash.playing:
+					if $Sounds/WeaveDash.volume_db > -60:
+						$Sounds/WeaveDash.volume_db -= 1
+					else:
+						$Sounds/WeaveDash.playing = false
 		
 		#Weave sound manager
 		#-------------------------------
@@ -226,11 +249,18 @@ func process_input(delta):
 		#One-handed gust homing dash
 		for i in [0,2]:
 			if tugVec[i] != NON_USE_VECTOR:
+				var otherHandNotTugging = false
 				var vec
-				if i == 0:vec = leftVec
-				elif i == 2: vec = rightVec
+				if i == 0:
+					vec = leftVec
+					if tugVec[2] == NON_USE_VECTOR:
+						otherHandNotTugging = true
+				elif i == 2: 
+					vec = rightVec
+					if tugVec[0] == NON_USE_VECTOR:
+						otherHandNotTugging = true
 				
-				if markedEn != null:
+				if markedEn != null && otherHandNotTugging && homingDashReady:
 					if root.get_node("Enemies").has_node(markedEnName):
 						var randInt = rand_range(0,10)
 						var vec2Enemy = (markedEn.global_transform.origin - global_transform.origin)
@@ -241,19 +271,18 @@ func process_input(delta):
 							homing_gust(markedEn)
 							tugVec[i] = NON_USE_VECTOR
 							tugVec[i+1] = NON_USE_VECTOR
-							print("Homed on " + markedEn.name)
 					else:
-						print("Mark set to null")
 						markedEn = null
 		#-------------------------------
 		#-------------------------------
 		#Two-handed gust dash
-		if gustPushing:
+		if gustPushing && availableAirDashes > 0:
 			if leftVec.angle_to(rightVec) < deg2rad(45):
 				var avgVec = (leftVec + rightVec)/2
 				
 				if avgVec.length() > GUST_DASH_TUG_MIN:
 					gust_dash(avgVec,delta)
+					availableAirDashes -= 1
 					
 					for i in range(0,4):
 						tugVec[i] = NON_USE_VECTOR
@@ -275,6 +304,7 @@ func process_movement(delta):
 	dir.y = 0
 	dir = dir.normalized()
 	
+	#Move us towards target if homingDashing
 	if moveState == "homingDash":
 		var vec = (markedEn.global_transform.origin - global_transform.origin).normalized()
 		vec *= HOMING_DASH_SPEED
@@ -284,15 +314,15 @@ func process_movement(delta):
 		if distVec.length() < HOMING_DISTANCE_MIN:
 			moveState = "stand"
 	
-	
 	var accel
 	
+	#Apply gravity
 	if moveState != "airDash" && moveState != "homingDash":
 		vel.y += delta*GRAVITY
+	#Unless we're air-dashing
 	elif moveState == "airDash":
 		var ADT = $AirDashTimer
-		#var dashTimerVelMult = ADT.time_left/(ADT.wait_time * .5)
-		vel = vel.normalized() * AIR_DASH_SPEED #* clamp(dashTimerVelMult,0,1)
+		vel = vel.normalized() * AIR_DASH_SPEED 
 		
 	
 	var hvel = vel
@@ -302,18 +332,17 @@ func process_movement(delta):
 	target *= MAX_SPEED
 	
 	
-	
-	#if dir.dot(hvel)<0:
-	#	accel = ACCEL
-	#el
-	if is_on_floor() && moveState != "airDash" && moveState != "homingDash":
-		accel = GROUND_DEACCEL
-		if weaving:
-			accel = WEAVE_DEACCEL
-	#elif weaving:
-	#	accel = WEAVE_DEACCEL
-	#elif moveState == "hitFloat":
-	#	accel = GROUND_DEACCEL
+	#Surface-dependent code
+	if is_on_floor():
+		#Regain air dashes
+		availableAirDashes = AIR_DASH_MAX
+		if moveState != "airDash" && moveState != "homingDash":
+			#Deacceleration on floor, if not dashing
+			accel = GROUND_DEACCEL
+			if weaving:
+				accel = WEAVE_DEACCEL
+		else:
+			accel = 0
 	else:
 		accel = 0
 	
@@ -329,6 +358,15 @@ func process_post_movement(delta):
 	for vec in tugVec:
 		if vec != NON_USE_VECTOR:
 			vec += vel
+
+func hit_by_enemy(enemy):
+	var vecAway = global_transform.origin - enemy.global_transform.origin.normalized()
+	vecAway.y = 1
+	vecAway = vecAway.normalized()
+	var magnitude = HIT_AWAY_SPEED
+	vecAway *= magnitude
+	vel = vecAway
+
 
 func game_menu_removed():
 	loadedGameMenu = null
@@ -410,6 +448,42 @@ func mark_enemy():
 	
 
 func VR_con_pressed(controller,button,delta):
+	if button == vRConButtons["Grip"]:
+		if swordSheathed:
+			var con
+			var canConGrab = false
+			var swordString = "None"
+			if controller == leftController:
+				con = leftController
+				canConGrab = handsReadytoDraw.Left
+				swordString = "Left"
+			elif controller == rightController:
+				con = rightController
+				canConGrab = handsReadytoDraw.Right
+				swordString = "Right"
+			
+			if canConGrab:
+				var newSword = packedSword.instance()
+				con.add_child(newSword)
+				swordSheathed = false
+				swordInHand = swordString
+		else:
+			var con
+			var canConSheathe = false
+			if controller == leftController:
+				con = leftController
+				if swordInHand == "Left":
+					canConSheathe = handsReadytoDraw.Left
+			elif controller == rightController:
+				con = rightController
+				if swordInHand == "Right":
+					canConSheathe = handsReadytoDraw.Right
+			
+			if canConSheathe:
+				var sword = con.get_node("GrippedSword")
+				sword.queue_free()
+				swordSheathed = true
+				
 	if button == vRConButtons["Trigger"]:
 		var tugIndex
 		if controller == leftController:
@@ -455,8 +529,6 @@ func VR_con_released(controller,button,delta):
 			loadGameMenu[1] = false
 
 
-
-
 func _on_OVRControllerLeft_button_pressed(button):
 	var delta = get_physics_process_delta_time()
 	#print("Left click " + String(button))
@@ -483,22 +555,43 @@ func _on_OVRControllerRight_button_release(button):
 	VR_con_released(rightController,button,delta)
 
 
+func outside_mode_set(mode,node):
+	if node.name == "GameManager":
+		#We're assuming this is a reset to the prewave menu
+		if mode == uModes.GameMenu:
+			rotation_degrees.y = 0
+			userMode = mode
+			var con
+			if swordInHand == "Left":
+				con = leftController
+			elif swordInHand == "Right":
+				con = rightController
+			
+			if con != null:
+				var sword = con.get_node("GrippedSword")
+				if sword:
+					sword.queue_free()
+					swordSheathed = true
+		elif mode == uModes.Game:
+			userMode = mode
 
 
+func _on_SheathArea_area_entered(area):
+	if area.name == "MenuPresser":
+		var controllerParent = area.get_parent().get_parent()
+		if controllerParent == leftController:
+			handsReadytoDraw.Left = true
+		elif controllerParent == rightController:
+			handsReadytoDraw.Right = true
+		
 
-#OLD MOVEMENT
-func player_hop(controller,delta):
-	var dashVector = controller.global_transform.basis.z.normalized()
-	vel = dashVector * -700 * delta
-	sounds.play("Hop")
+
+func _on_SheathArea_area_exited(area):
+	if area.name == "MenuPresser":
+		var controllerParent = area.get_parent().get_parent()
+		if controllerParent == leftController:
+			handsReadytoDraw.Left = false
+		elif controllerParent == rightController:
+			handsReadytoDraw.Right = false
+		
 	
-
-#OLD V2
-func tug_dash(dashVec,delta):
-	var vec = dashVec.normalized()
-	var magnitude = clamp(dashVec.length() * 30,0,200)
-	vec *= magnitude * -1
-	vec = vec.rotated(Vector3(0,1,0),rotation.y)
-	
-	
-	vel += vec

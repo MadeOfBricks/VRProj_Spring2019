@@ -1,7 +1,7 @@
 extends StaticBody
 
 
-const FLOAT_SPEED = 10 
+const FLOAT_SPEED = 10
 const ROTATE_SPEED = .05
 const HANGBACK_MAX_DISTANCE = 40
 const HANGBACK_MIN_DISTANCE = 20
@@ -18,13 +18,12 @@ var anim
 var player
 
 var preFlinchState = 0
-
 var health = 2
-
 var vel = Vector3()
+var approachOffset
 
 var modes = {"Full":0,"Dummy":1,"Disable":2}
-var myMode = modes.Dummy
+var myMode = modes.Full
 
 var states = {"HangBack":0,"Approach":1,"RangedPrepare":2,"MeleePrepare":3,"MeleeAttack":4,\
 "RangedAttack":5,"AttackRecovery":6,"Retreat":7,"Flinch":8,"Death":9}
@@ -33,23 +32,25 @@ var hangBackAngle
 var attackTargetVec = Vector3()
 
 func _ready():
+	randomize()
 	sounds = $Sounds
 	root = get_tree().get_root().get_child(0)
 	anim = get_node("AnimationPlayer")
 	player = root.get_node("Player")
+	approachOffset = deg2rad(rand_range(-10,10))
 	state_change(states.Approach)
-	
+
 
 func _physics_process(delta):
 	process_state(delta)
 	process_movement(delta)
-	
+
 func process_state(delta):
 	#Variables for use in multiple states
 	var vecToPlayer = player.global_transform.origin - global_transform.origin
 	var playDist = vecToPlayer.length()
-	
-	
+
+
 	#Full AI behavior
 	if myMode == modes.Full:
 		#Approach State
@@ -58,30 +59,33 @@ func process_state(delta):
 			rotate_towards(player)
 			tarVec = player.global_transform.origin - global_transform.origin
 			tarVec.y = 0
+			tarVec = tarVec.rotated(Vector3(0,1,0),approachOffset)
 			tarVec = tarVec.normalized()
 			dash(tarVec, DASH_SPEED)
 			if playDist < ATTACK_TRIGGER_DISTANCE_MIN:
 				state_change(states.MeleePrepare)
-		
+
 		#HangBack state
 		elif myState == states.HangBack:
 			var approachWait = get_node("Timers/WaitToApproach")
 			if approachWait.is_stopped():
 				approachWait.start()
-			
+
 			rotate_towards(player)
-			
+
 			var tarVec = player.global_transform.origin - global_transform.origin
 			tarVec.y = 0
-			
+
 			#When too close
 			if playDist < HANGBACK_MIN_DISTANCE:
 				tarVec = tarVec.rotated(Vector3(0,1,0),deg2rad(180))
+				tarVec = tarVec.rotated(Vector3(0,1,0),approachOffset)
 			#When too far
 			elif playDist < HANGBACK_MAX_DISTANCE:
 				tarVec = tarVec.rotated(Vector3(0,1,0),hangBackAngle)
-			
-			
+				tarVec = tarVec.rotated(Vector3(0,1,0),approachOffset)
+
+
 			tarVec = tarVec.normalized()
 			dash(tarVec, DASH_SPEED)
 		elif myState == states.MeleePrepare:
@@ -89,15 +93,15 @@ func process_state(delta):
 				rotate_towards(player)
 				attackTargetVec = vecToPlayer
 				attackTargetVec.y = 0
-	
-		
+
+
 
 func process_movement(delta):
-	
+
 	#MeleePrepare state
 	if myState == states.MeleePrepare:
 		vel = vel.normalized() * (vel.length() - MELEE_PREPARE_DEACCEL)
-	
+
 	vel = vel.normalized() * (vel.length() - DEACCEL)
 	var thisFrameVel = vel * delta
 	translate(thisFrameVel)
@@ -123,11 +127,11 @@ func state_change(state,arg0 = null):
 		#Save previous state
 		preFlinchState = myState
 		myState = state
-		
+
 		#Flinch Movement
 		var hitVector = arg0
 		var awayVec = $Meshes/Torso/Skull.global_transform.origin - \
-		player.get_node("ARVROrigin/ARVRCamera").global_transform.origin 
+		player.get_node("ARVROrigin/ARVRCamera").global_transform.origin
 		var flinchVector = awayVec
 		dash(flinchVector,DASH_SPEED * .3,true)
 		var forwardVec = $Meshes.global_transform.basis.z.normalized()
@@ -135,26 +139,26 @@ func state_change(state,arg0 = null):
 		var leftVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(90))
 		var rightAngDiff = hitVector.angle_to(rightVec)
 		var leftAngDiff = hitVector.angle_to(leftVec)
-		
+
 		var anims = ["FlinchR","FlinchL"]
 		if rightAngDiff < leftAngDiff:
 			anim.play(anims[0])
 		else:
 			anim.play(anims[1])
-		
+
 		#Reset timers
 		$Timers.reset_all()
-		
+
 		#Start Flinch Timer
 		$Timers/FlinchRecover.start()
-		
+
 		#Decrement Health
 		health-= 1
 		sounds.play("Hit")
 		if health <= 0:
 			destroy()
-		
-		
+
+
 
 func dash(vec, speed,override = false):
 	if $Timers/DashCooldown.is_stopped() || override:
@@ -165,12 +169,12 @@ func dash(vec, speed,override = false):
 func rotate_towards(target):
 	var tarVec2Pos = Vector2(target.global_transform.origin.x,target.global_transform.origin.z)
 	var myVec2Pos = Vector2(global_transform.origin.x,global_transform.origin.z)
-	
+
 	var vec2Tar = myVec2Pos - tarVec2Pos
 	var facingVec = $Meshes.global_transform.basis.xform(Vector3(0,0,1)) * -1
 	var vec2FacingVec = Vector2(facingVec.x,facingVec.z)
 	var angleTo = vec2FacingVec.angle_to(vec2Tar) * -1
-	
+
 	if abs(angleTo) >= ROTATE_SPEED:
 		$Meshes.rotate(Vector3(0,1,0),sign(angleTo) * ROTATE_SPEED)
 
@@ -178,8 +182,8 @@ func rotate_towards(target):
 func sword_hit(hitVector):
 	#TODO: Replace with state_change("flinch")
 	state_change(states.Flinch,hitVector)
-	
-	
+
+
 
 func destroy():
 	$CollisionShape.disabled = true
@@ -219,7 +223,7 @@ func _on_ScytheBlade_body_entered(body):
 		if body.name == "Player":
 			sounds.play("Hit")
 			body.hit_by_enemy(self)
-	
+
 
 
 func _on_FlinchRecover_timeout():

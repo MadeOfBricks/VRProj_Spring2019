@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/FinalHit.wav-82e2f58f579fb67e2f5af38dd9165cdd.sample"
+
+[deps]
+
+source_file="res://Assets/Sounds/FinalHit.wav"
+dest_files=[ "res://.import/FinalHit.wav-82e2f58f579fb67e2f5af38dd9165cdd.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

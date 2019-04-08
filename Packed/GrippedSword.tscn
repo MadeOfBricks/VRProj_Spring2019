@@ -40,7 +40,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="BladeEdge" type="Area" parent="SwordGrip" index="1"]
 
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.106484, 2.91708e-009, -1.26538 )
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.6, 0.106484, 2.91708e-009, -1.29222 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0
@@ -100,17 +100,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.019159, -8.37467e-010, -0.0
 shape = SubResource( 2 )
 disabled = false
 
-[connection signal="area_entered" from="SwordGrip/BladeEdge" to="." method="_on_BladeEdge_area_entered"]
-
-[connection signal="area_exited" from="SwordGrip/BladeEdge" to="." method="_on_BladeEdge_area_exited"]
-
 [connection signal="body_entered" from="SwordGrip/BladeEdge" to="." method="_on_BladeEdge_body_entered"]
 
 [connection signal="body_exited" from="SwordGrip/BladeEdge" to="." method="_on_BladeEdge_body_exited"]
-
-[connection signal="area_entered" from="SwordGrip/BladeEnd" to="." method="_on_BladeEnd_area_entered"]
-
-[connection signal="area_exited" from="SwordGrip/BladeEnd" to="." method="_on_BladeEnd_area_exited"]
 
 [connection signal="body_entered" from="SwordGrip/BladeEnd" to="." method="_on_BladeEnd_body_entered"]
 
