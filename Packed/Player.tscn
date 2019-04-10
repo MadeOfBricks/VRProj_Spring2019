@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Scene1.gd" type="Script" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=7]
 [ext_resource path="res://Assets/Sounds/GustDash.wav" type="AudioStream" id=8]
 [ext_resource path="res://Assets/Sounds/WeaveDashNew.wav" type="AudioStream" id=9]
+[ext_resource path="res://Assets/Sounds/SwordGrab.wav" type="AudioStream" id=10]
+[ext_resource path="res://Assets/Sounds/SwordSheath.wav" type="AudioStream" id=11]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -198,14 +200,14 @@ subdivide_depth = 0
 
 [sub_resource type="BoxShape" id=6]
 
-extents = Vector3( 0.375, 0.3, 0.3 )
+extents = Vector3( 0.6, 0.6, 0.3 )
 
 [sub_resource type="CapsuleShape" id=7]
 
 radius = 0.5
 height = 1.0
 
-[node name="Player" type="KinematicBody" index="0"]
+[node name="Player" type="KinematicBody"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.84789, 0 )
 input_ray_pickable = true
@@ -335,7 +337,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="SheathArea" type="Area" parent="ARVROrigin/Sheath" index="1"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.264013 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.106611 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0
@@ -395,6 +397,24 @@ bus = "Master"
 [node name="WeaveDash" type="AudioStreamPlayer" parent="Sounds" index="2"]
 
 stream = ExtResource( 9 )
+volume_db = -20.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="SwordDraw" type="AudioStreamPlayer" parent="Sounds" index="3"]
+
+stream = ExtResource( 10 )
+volume_db = -20.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="SwordSheath" type="AudioStreamPlayer" parent="Sounds" index="4"]
+
+stream = ExtResource( 11 )
 volume_db = -20.0
 pitch_scale = 1.0
 autoplay = false

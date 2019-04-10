@@ -414,7 +414,7 @@ extents = Vector3( 4, 1, 0.1 )
 
 extents = Vector3( 4, 1, 0.1 )
 
-[node name="Reap" type="StaticBody" index="0" groups=[
+[node name="Reap" type="StaticBody" groups=[
 "hitable",
 ]]
 

@@ -6,12 +6,12 @@ var root
 const GRAVITY = -24.8
 const MAX_SPEED = 20
 const JUMP_SPEED = 14
-const AIR_DASH_SPEED = 20
-const AIR_DASH_MAX = 1
+const GUST_DASH_SPEED = 15
+const GUST_DASH_MAX = 1
 const WEAVE_SPEED = 10
 const GUST_DASH_TUG_MIN = .4
 const HOMING_DASH_SPEED = 30
-const HOMING_DISTANCE_RANGE_MAX = 30
+const HOMING_DISTANCE_RANGE_MAX = 15
 const HOMING_DISTANCE_MIN = 4.3
 const HIT_AWAY_SPEED = 10
 const HEALTH_MAX = 1
@@ -61,7 +61,7 @@ var health = HEALTH_MAX
 
 var tugVec = [NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR]
 
-var availableAirDashes = AIR_DASH_MAX
+var availableAirDashes = GUST_DASH_MAX
 
 var homingDashReady = false
 
@@ -315,7 +315,7 @@ func process_movement(delta):
 	#Unless we're air-dashing
 	elif moveState == "airDash":
 		var ADT = $AirDashTimer
-		vel = vel.normalized() * AIR_DASH_SPEED 
+		vel = vel.normalized() * GUST_DASH_SPEED 
 		
 	
 	var hvel = vel
@@ -328,7 +328,7 @@ func process_movement(delta):
 	#Surface-dependent code
 	if is_on_floor():
 		#Regain air dashes
-		availableAirDashes = AIR_DASH_MAX
+		availableAirDashes = GUST_DASH_MAX
 		if moveState != "airDash" && moveState != "homingDash":
 			#Deacceleration on floor, if not dashing
 			accel = GROUND_DEACCEL
@@ -414,7 +414,7 @@ func gust_dash(dashVec,delta):
 		sounds.play("GustDash")
 		$AirDashTimer.start()
 		var vec = dashVec.normalized()
-		var magnitude = AIR_DASH_SPEED
+		var magnitude = GUST_DASH_SPEED
 		vec *= magnitude * -1
 		vec = vec.rotated(Vector3(0,1,0),rotation.y)
 		
@@ -527,6 +527,7 @@ func VR_con_pressed(controller,button,delta):
 				con.add_child(newSword)
 				swordSheathed = false
 				swordInHand = swordString
+				sounds.play("SwordDraw")
 		else:
 			var con
 			var canConSheathe = false
@@ -543,6 +544,7 @@ func VR_con_pressed(controller,button,delta):
 				var sword = con.get_node("GrippedSword")
 				sword.queue_free()
 				swordSheathed = true
+				sounds.play("SwordSheath")
 				
 	if button == vRConButtons["Trigger"]:
 		var tugIndex

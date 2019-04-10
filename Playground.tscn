@@ -4,10 +4,11 @@
 [ext_resource path="res://DefaultEnvironment.tres" type="Environment" id=2]
 [ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=4]
-[ext_resource path="res://Packed/Tree2.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Packed/Tree3.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Packed/Environment/Tree2.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Packed/Environment/Tree3.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=7]
 [ext_resource path="res://Packed/Player.tscn" type="PackedScene" id=8]
+
 
 [sub_resource type="AudioStreamRandomPitch" id=1]
 

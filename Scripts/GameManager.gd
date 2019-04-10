@@ -1,13 +1,14 @@
 extends Spatial
 
 const ENV_FEATURE_SECTOR_COUNT = 7.0
-const ENV_FEATURE_MAKE_CHANCE = .8
+const ENV_FEATURE_MAKE_CHANCE = .5
+const MIN_ENEMY_DISTANCE_TO_PLAYER = 20
 
 var waveCount = 0
 var root
 
-var envFeatures = [preload("res://Packed/TerrainBlock.tscn"),preload("res://Packed/Tree2.tscn")\
-	,preload("res://Packed/Tree3.tscn")]
+var envFeatures = [preload("res://Packed/Environment/TerrainBlock.tscn"),preload("res://Packed/Environment/Tree2.tscn")\
+	,preload("res://Packed/Environment/Tree3.tscn")]
 	
 var preWaveMenu = preload("res://Packed/PreWaveMenu.tscn")
 var enemies = [preload("res://Packed/Enemies/BasicReap.tscn"), preload("res://Packed/Enemies/AggressiveReap.tscn")]
@@ -23,6 +24,8 @@ var groundXLength
 var groundZLength
 
 var loadedPreWaveMenu
+
+var enemySpawnLocations = []
 
 func _ready():
 	
@@ -44,7 +47,6 @@ func _ready():
 	level_reset()
 
 func level_reset():
-	print("level_reset called")
 	#Set player usermode to gamemenu and sword to sheathed, 2 is code for gamemenu
 	player.outside_mode_set(2,self)
 	#Increment wave
@@ -56,21 +58,37 @@ func level_reset():
 		
 	#Generate new environment features
 	for xMult in range(0,ENV_FEATURE_SECTOR_COUNT):
-		var make = rand_range(0,1)
-		if make >= ENV_FEATURE_MAKE_CHANCE:
-			for zMult in range(0,sectorCount):
-				var sectorStartXZ = Vector2(loCorner.x + groundXLength * (xMult/sectorCount), loCorner.y + groundZLength * (zMult/sectorCount))
-				var randomOffset = Vector2(groundXLength * rand_range(0,1/(sectorCount * 2)),groundZLength * rand_range(0,1/(sectorCount * 2)))
-				var specificPlaceXZ = sectorStartXZ + randomOffset
+		for zMult in range(0,ENV_FEATURE_SECTOR_COUNT):
+			#Some location in this sector
+			var sectorStartXZ = Vector2(loCorner.x + groundXLength * (xMult/ENV_FEATURE_SECTOR_COUNT), loCorner.y + groundZLength * (zMult/ENV_FEATURE_SECTOR_COUNT))
+			var randomOffset = Vector2(groundXLength * rand_range(0,1/(ENV_FEATURE_SECTOR_COUNT * 2)),groundZLength * rand_range(0,1/(ENV_FEATURE_SECTOR_COUNT * 2)))
+			var specificPlaceXZ = sectorStartXZ + randomOffset
+			var spawnLocation = Vector3(sectorStartXZ.x,0,specificPlaceXZ.y)
+			#Decide whether we make an environmental feature
+			var make = rand_range(0,1)
+			if make <= ENV_FEATURE_MAKE_CHANCE:
+				
+				
 				
 				var thisFeature
 				thisFeature = envFeatures[randi() % envFeatures.size()].instance()
 				envFeaturesNode.add_child(thisFeature)
 				thisFeature.global_transform.origin = Vector3(specificPlaceXZ.x,0,specificPlaceXZ.y)
+				if thisFeature.name.find("TerrainBlock") != -1:
+					var rands = Vector3(rand_range(0,360),rand_range(0,360),rand_range(0,360))
+					thisFeature.rotation_degrees = rands
+				elif thisFeature.name.find("Tree") != -1:
+					thisFeature.rotation_degrees.y = rand_range(0,360)
 			
+			#Decide whether or not this is a valid enemy spawn area
+			var playerXZ = Vector2(player.global_transform.origin.x,player.global_transform.origin.z)
+			if (specificPlaceXZ - playerXZ).length() > MIN_ENEMY_DISTANCE_TO_PLAYER:
+				enemySpawnLocations.append(spawnLocation)
+	
 	
 	#Move player back to center
 	player.translation = Vector3(0,3.9,0)
+	player.vel = Vector3(0,0,0)
 	
 	#Load pre-wave menu
 	var thisMenu = preWaveMenu.instance()
@@ -85,11 +103,13 @@ func wave_start():
 	#Create enemies
 	for i in range(0,waveCount):
 		var thisEnemy = enemies[randi() % enemies.size()].instance()
-		var randomEnvironThing = envFeaturesNode.get_children()[randi() % envFeaturesNode.get_children().size()]
-		var awayVec = Vector3(1,0,0).rotated(Vector3(0,1,0),rand_range(0,2 * PI))
+		var spawnPoint
+		spawnPoint = enemySpawnLocations[randi() % enemySpawnLocations.size()]
+		
+		#var awayVec = Vector3(1,0,0).rotated(Vector3(0,1,0),rand_range(0,2 * PI))
 		enemiesNode.add_child(thisEnemy)
 		thisEnemy.connect("tree_exited",self,"_on_enemy_death")
-		thisEnemy.global_transform.origin = randomEnvironThing.global_transform.origin + awayVec
+		thisEnemy.global_transform.origin = spawnPoint 
 	
 	#Free pre-wave menu
 	loadedPreWaveMenu.queue_free()
