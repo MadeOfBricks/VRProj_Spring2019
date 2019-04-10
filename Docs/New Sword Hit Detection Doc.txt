@@ -2,6 +2,14 @@
 Test whether we can be "too fast"
   See if sword can just destroy on contact
 
+New sword has one area, one shape
+Every frame, update a list of the last 5 translations and rotations of the sword
+Dependent on the current frame versus previous frames, decide whether or not we are valid hitting
+	From each frame to the next, position[i] - position[i+1] must have an angular difference less than 45 with
+	one of the area's basises (probably X * -1)
+
+
+
 
 
 Sword moves

@@ -3,11 +3,11 @@ extends StaticBody
 
 const FLOAT_SPEED = 10
 const ROTATE_SPEED = .05
-const HANGBACK_MAX_DISTANCE = 30
-const HANGBACK_MIN_DISTANCE = 7
-const ATTACK_TRIGGER_DISTANCE_MIN = 5
+const HANGBACK_MAX_DISTANCE = 40
+const HANGBACK_MIN_DISTANCE = 20
+const ATTACK_TRIGGER_DISTANCE_MIN = 6
 const MELEE_PREPARE_DEACCEL = 2
-const DASH_SPEED = 50
+const DASH_SPEED = 40
 const ATTACK_DASH_SPEED = 60
 const DEACCEL = .5
 
@@ -23,7 +23,7 @@ var vel = Vector3()
 var approachOffset
 
 var modes = {"Full":0,"Dummy":1,"Disable":2}
-var myMode = modes.Full
+var myMode = modes.Dummy
 
 var states = {"HangBack":0,"Approach":1,"RangedPrepare":2,"MeleePrepare":3,"MeleeAttack":4,\
 "RangedAttack":5,"AttackRecovery":6,"Retreat":7,"Flinch":8,"Death":9}
@@ -49,10 +49,10 @@ func process_state(delta):
 	#Variables for use in multiple states
 	var vecToPlayer = player.global_transform.origin - global_transform.origin
 	var playDist = vecToPlayer.length()
-	
-	#Player is alive
+
+
 	#Full AI behavior
-	if myMode == modes.Full && player.userMode != 3:
+	if myMode == modes.Full:
 		#Approach State
 		if myState == states.Approach:
 			var tarVec
@@ -218,6 +218,7 @@ func _on_WaitToApproach_timeout():
 
 func _on_ScytheBlade_body_entered(body):
 	var timeString = String(OS.get_time().minute) + ":" + String(OS.get_time().second)
+	print(timeString + ": " + "Scythe entered " + body.name)
 	if anim.current_animation == "Swing":
 		if body.name == "Player":
 			sounds.play("Hit")

@@ -8,7 +8,7 @@
 [ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=6]
 [ext_resource path="res://Assets/Sounds/PlayerHop.wav" type="AudioStream" id=7]
 [ext_resource path="res://Assets/Sounds/GustDash.wav" type="AudioStream" id=8]
-[ext_resource path="res://Assets/Sounds/WeaveDash.wav" type="AudioStream" id=9]
+[ext_resource path="res://Assets/Sounds/WeaveDashNew.wav" type="AudioStream" id=9]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -205,7 +205,7 @@ extents = Vector3( 0.375, 0.3, 0.3 )
 radius = 0.5
 height = 1.0
 
-[node name="Player" type="KinematicBody"]
+[node name="Player" type="KinematicBody" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.84789, 0 )
 input_ray_pickable = true
@@ -296,7 +296,7 @@ _sections_unfolded = [ "Transform", "material" ]
 
 script = SubResource( 4 )
 
-[node name="HandMesh2" parent="ARVROrigin/OVRControllerLeft" index="1" instance=ExtResource( 4 )]
+[node name="Hand" parent="ARVROrigin/OVRControllerLeft" index="1" instance=ExtResource( 4 )]
 
 transform = Transform( 0.007, 0, -6.11959e-010, -5.02068e-010, 0.00400225, -0.00574299, -3.49888e-010, -0.00574299, -0.00400225, 0.0770014, 0.0714912, 0.162523 )
 
@@ -306,7 +306,7 @@ controller_id = 2
 script = SubResource( 4 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 
-[node name="HandMesh" parent="ARVROrigin/OVRControllerRight" index="1" instance=ExtResource( 4 )]
+[node name="Hand" parent="ARVROrigin/OVRControllerRight" index="1" instance=ExtResource( 4 )]
 
 transform = Transform( -0.007, 0, -6.11959e-010, 5.02068e-010, 0.00400225, -0.00574299, 3.49888e-010, -0.00574299, -0.00400225, -0.0534475, 0.0695876, 0.163983 )
 
@@ -395,7 +395,7 @@ bus = "Master"
 [node name="WeaveDash" type="AudioStreamPlayer" parent="Sounds" index="2"]
 
 stream = ExtResource( 9 )
-volume_db = -15.0
+volume_db = -20.0
 pitch_scale = 1.0
 autoplay = false
 mix_target = 0

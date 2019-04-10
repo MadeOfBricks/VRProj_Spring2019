@@ -1,13 +1,12 @@
 TODO
 	Player health and death
 	Resize trees, give collision
-	Implement ranged enemies
+	Implement other enemies
 	Scoring system
-	Sounds for: Sheathing
+	Sounds for: Sheathing, enemy attack prep/execute
 	Player heal and offensive ability (fireball, teleport, etc)
 
 MightDo
 	Enhanced visual effects
 	Enhanced sound effects
-	Redo sword collision
 	

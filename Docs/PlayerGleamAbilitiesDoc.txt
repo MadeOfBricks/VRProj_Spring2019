@@ -1,0 +1,10 @@
+Player "Gleam" indicated by dot on back of hand
+A player's hand gains gleam when either it touches a hand with gleam already, or the player kills with a sword in the other hand
+
+
+
+Gleam powers
+	Breaker fist
+	Restore
+		Use once per round
+		

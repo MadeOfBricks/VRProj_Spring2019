@@ -1,5 +1,8 @@
 extends Spatial
 
+const ENV_FEATURE_SECTOR_COUNT = 7.0
+const ENV_FEATURE_MAKE_CHANCE = .8
+
 var waveCount = 0
 var root
 
@@ -7,7 +10,7 @@ var envFeatures = [preload("res://Packed/TerrainBlock.tscn"),preload("res://Pack
 	,preload("res://Packed/Tree3.tscn")]
 	
 var preWaveMenu = preload("res://Packed/PreWaveMenu.tscn")
-var enemies = [preload("res://Packed/BasicReap.tscn")]
+var enemies = [preload("res://Packed/Enemies/BasicReap.tscn"), preload("res://Packed/Enemies/AggressiveReap.tscn")]
 
 var enemiesNode 
 var envFeaturesNode
@@ -52,17 +55,18 @@ func level_reset():
 		env.queue_free()
 		
 	#Generate new environment features
-	var sectorCount = 5.0
-	for xMult in range(0,sectorCount):
-		for zMult in range(0,sectorCount):
-			var sectorStartXZ = Vector2(loCorner.x + groundXLength * (xMult/sectorCount), loCorner.y + groundZLength * (zMult/sectorCount))
-			var randomOffset = Vector2(groundXLength * rand_range(0,1/(sectorCount * 2)),groundZLength * rand_range(0,1/(sectorCount * 2)))
-			var specificPlaceXZ = sectorStartXZ + randomOffset
-			
-			var thisFeature
-			thisFeature = envFeatures[randi() % envFeatures.size()].instance()
-			envFeaturesNode.add_child(thisFeature)
-			thisFeature.global_transform.origin = Vector3(specificPlaceXZ.x,0,specificPlaceXZ.y)
+	for xMult in range(0,ENV_FEATURE_SECTOR_COUNT):
+		var make = rand_range(0,1)
+		if make >= ENV_FEATURE_MAKE_CHANCE:
+			for zMult in range(0,sectorCount):
+				var sectorStartXZ = Vector2(loCorner.x + groundXLength * (xMult/sectorCount), loCorner.y + groundZLength * (zMult/sectorCount))
+				var randomOffset = Vector2(groundXLength * rand_range(0,1/(sectorCount * 2)),groundZLength * rand_range(0,1/(sectorCount * 2)))
+				var specificPlaceXZ = sectorStartXZ + randomOffset
+				
+				var thisFeature
+				thisFeature = envFeatures[randi() % envFeatures.size()].instance()
+				envFeaturesNode.add_child(thisFeature)
+				thisFeature.global_transform.origin = Vector3(specificPlaceXZ.x,0,specificPlaceXZ.y)
 			
 	
 	#Move player back to center

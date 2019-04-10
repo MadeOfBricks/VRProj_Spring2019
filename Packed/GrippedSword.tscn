@@ -1,15 +1,15 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/GrippedSword.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Models/sword.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://Scripts/AttachDebugger.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Sounds/BadHit.wav" type="AudioStream" id=5]
+[ext_resource path="res://Assets/Sounds/GoodHit.wav" type="AudioStream" id=6]
 
 [sub_resource type="BoxShape" id=1]
 
-extents = Vector3( 0.0554694, 0.0207867, 1.05923 )
-
-[sub_resource type="BoxShape" id=2]
-
-extents = Vector3( 0.0433467, 0.020787, 1.31715 )
+extents = Vector3( 0.07, 0.025, 1.4 )
 
 [node name="GrippedSword" type="Spatial"]
 
@@ -38,9 +38,9 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]
 
-[node name="BladeEdge" type="Area" parent="SwordGrip" index="1"]
+[node name="Blade" type="Area" parent="SwordGrip" index="1"]
 
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.6, 0.106484, 2.91708e-009, -1.29222 )
+transform = Transform( 0.999602, -8.69349e-012, 0.0225611, -3.4774e-011, 1, 1.97235e-009, -0.0352517, -7.70451e-010, 0.999602, 0, 0, -1.36543 )
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0
@@ -63,49 +63,53 @@ reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
 _sections_unfolded = [ "Transform" ]
 
-[node name="CollisionShape" type="CollisionShape" parent="SwordGrip/BladeEdge" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="SwordGrip/Blade" index="0"]
 
-transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.0942322, -6.44051e-010, -0.184515 )
+transform = Transform( 0.99997, -6.52636e-013, 0.00618049, -2.6674e-012, 1, 5.40315e-010, -0.00965703, -2.11061e-010, 0.99997, 0.00630128, 5.50876e-010, 0.141218 )
 shape = SubResource( 1 )
 disabled = false
 
-[node name="BladeEnd" type="Area" parent="SwordGrip" index="2"]
+[node name="Debugger" type="Timer" parent="." index="1"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0575078, -2.51375e-009, -1.26538 )
-input_ray_pickable = false
-input_capture_on_drag = false
-space_override = 0
-gravity_point = false
-gravity_distance_scale = 0.0
-gravity_vec = Vector3( 0, -1, 0 )
-gravity = 9.8
-linear_damp = 0.1
-angular_damp = 1.0
-priority = 0.0
-monitoring = true
-monitorable = true
-collision_layer = 1
-collision_mask = 1
-audio_bus_override = false
-audio_bus_name = "Master"
-reverb_bus_enable = false
-reverb_bus_name = "Master"
-reverb_bus_amount = 0.0
-reverb_bus_uniformity = 0.0
-_sections_unfolded = [ "Transform" ]
+process_mode = 1
+wait_time = 0.5
+one_shot = false
+autostart = true
+script = ExtResource( 3 )
 
-[node name="CollisionShape" type="CollisionShape" parent="SwordGrip/BladeEnd" index="0"]
+[node name="ValidHit" type="Timer" parent="." index="2"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.019159, -8.37467e-010, -0.0555773 )
-shape = SubResource( 2 )
-disabled = false
+process_mode = 1
+wait_time = 0.2
+one_shot = true
+autostart = false
 
-[connection signal="body_entered" from="SwordGrip/BladeEdge" to="." method="_on_BladeEdge_body_entered"]
+[node name="Sounds" type="Spatial" parent="." index="3"]
 
-[connection signal="body_exited" from="SwordGrip/BladeEdge" to="." method="_on_BladeEdge_body_exited"]
+script = ExtResource( 4 )
 
-[connection signal="body_entered" from="SwordGrip/BladeEnd" to="." method="_on_BladeEnd_body_entered"]
+[node name="BadHit" type="AudioStreamPlayer" parent="Sounds" index="0"]
 
-[connection signal="body_exited" from="SwordGrip/BladeEnd" to="." method="_on_BladeEnd_body_exited"]
+stream = ExtResource( 5 )
+volume_db = -20.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="GoodHit" type="AudioStreamPlayer" parent="Sounds" index="1"]
+
+stream = ExtResource( 6 )
+volume_db = -10.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[connection signal="body_entered" from="SwordGrip/Blade" to="." method="_on_Blade_body_entered"]
+
+[connection signal="body_exited" from="SwordGrip/Blade" to="." method="_on_Blade_body_exited"]
+
+[connection signal="timeout" from="Debugger" to="Debugger" method="_on_Debugger_timeout"]
 
 

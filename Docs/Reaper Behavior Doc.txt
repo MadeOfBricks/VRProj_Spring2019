@@ -1,3 +1,9 @@
+myMode variable
+	"Full" full game behavior
+	"Dummy" Will not attack, but can be hit
+	"Disable" No AI or reactions, invisible
+
+
 Various states for various enemies
 	Strafing about and eyeing the player
 	Approaching the player for an up-close attack

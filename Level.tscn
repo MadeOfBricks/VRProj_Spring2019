@@ -80,7 +80,7 @@ _sections_unfolded = [ "Albedo" ]
 
 extents = Vector3( 1, 1, 1 )
 
-[node name="RootLevel" type="Spatial" index="0"]
+[node name="RootLevel" type="Spatial"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.345118, 0 )
 

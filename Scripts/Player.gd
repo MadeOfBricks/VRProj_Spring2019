@@ -12,8 +12,9 @@ const WEAVE_SPEED = 10
 const GUST_DASH_TUG_MIN = .4
 const HOMING_DASH_SPEED = 30
 const HOMING_DISTANCE_RANGE_MAX = 30
-const HOMING_DISTANCE_MIN = 5
-const HIT_AWAY_SPEED = 5
+const HOMING_DISTANCE_MIN = 4.3
+const HIT_AWAY_SPEED = 10
+const HEALTH_MAX = 1
 const ACCEL = 4.5
 const GROUND_DEACCEL = 12
 const AIR_DEACCEL = 6
@@ -26,6 +27,7 @@ const HIT_FOR_HOMING_DISTANCE = 2
 var marker = preload("res://Packed/Marker.tscn")
 var gameMenu = preload("res://Packed/GameMenu.tscn")
 var packedSword = preload("res://Packed/GrippedSword.tscn")
+var deathMenu = preload("res://Packed/DeathMenu.tscn")
 
 var uModes = {"Game":0,"Menu":1,"GameMenu":2,"Dead":3}
 var userMode
@@ -55,6 +57,8 @@ var stickTurnReady = [true,true]
 var loadGameMenu = [false,false]
 var loadedGameMenu = null
 
+var health = HEALTH_MAX
+
 var tugVec = [NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR,NON_USE_VECTOR]
 
 var availableAirDashes = AIR_DASH_MAX
@@ -72,6 +76,8 @@ var markedEnName
 var swordSheathed = true
 var handsReadytoDraw = {"Left":false,"Right":false}
 var swordInHand = "None"
+
+var gleamPower = {"Left":0,"Right":0}
 
 func _ready():
 	root = get_tree().get_root().get_child(0)
@@ -146,29 +152,24 @@ func process_input(delta):
 	sticks[1] = rightStick
 	#-------------------------------
 	
-	if userMode == uModes.Game:
-		#-------------------------------
-		#Stick turning
-		for i in range(0,2):
-			var stick = sticks[i]
-			var stickX = sticks[i].x
-			if abs(stickX) > .9:
-				if stickTurnReady[i]:
-					rotate_y(deg2rad(45) * sign(stickX) * -1)
-					stickTurnReady[i] = false
-			else:
-				stickTurnReady[i] = true
-		#-------------------------------
+	#-------------------------------
+	#Stick turning
+	for i in range(0,2):
+		var stick = sticks[i]
+		var stickX = sticks[i].x
+		if abs(stickX) > .9:
+			if stickTurnReady[i]:
+				rotate_y(deg2rad(45) * sign(stickX) * -1)
+				stickTurnReady[i] = false
+		else:
+			stickTurnReady[i] = true
+	#-------------------------------
 		
+	if userMode == uModes.Game:
 		#-------------------------------
 		#Weave-dashing
 		if weaving:
 			
-			#If sound not playing, start it inaudibly (UNIMP)
-			if false:
-				if $Sounds/WeaveDash.playing == false:
-					$Sounds/WeaveDash.playing = true
-					$Sounds/WeaveDash.volume_db = -60
 				
 			var headLog = vRGearPosLog.Head
 			var headMovVec = headLog[1] - headLog[0]
@@ -201,13 +202,6 @@ func process_input(delta):
 						if !$Sounds/WeaveDash.playing:
 							$Sounds/WeaveDash.play()
 			
-			#Dynamic WeaveDash volume (UNIMP)
-			if false:
-				if weAreWeaving:
-					if $Sounds/WeaveDash.volume_db < -15:
-						$Sounds/WeaveDash.volume_db += 15
-					else:
-						$Sounds/WeaveDash.volume_db -= 1
 			
 			
 				
@@ -220,7 +214,6 @@ func process_input(delta):
 					else:
 						$Sounds/WeaveDash.playing = false
 		
-		#Weave sound manager
 		#-------------------------------
 		
 		#-------------------------------
@@ -359,13 +352,36 @@ func process_post_movement(delta):
 		if vec != NON_USE_VECTOR:
 			vec += vel
 
+func gleam_add(count,hand):
+	var con
+	var setTo
+	if hand == "Left":
+		con = leftController
+		gleamPower.Left = clamp(gleamPower.Left,0,gleamPower.Left + count)
+		setTo = gleamPower.Left
+	elif hand == "Right":
+		con = rightController
+		gleamPower.Right = clamp(gleamPower.Right,0,gleamPower.Right + count)
+		setTo = gleamPower.Right
+	
+	
+	con.get_node("Hand/HandGleam").set_gleam(setTo)
+
+
 func hit_by_enemy(enemy):
+	
+	#Knockback
 	var vecAway = global_transform.origin - enemy.global_transform.origin.normalized()
 	vecAway.y = 1
 	vecAway = vecAway.normalized()
 	var magnitude = HIT_AWAY_SPEED
 	vecAway *= magnitude
 	vel = vecAway
+	
+	#Health Decrement
+	health -= 1
+	if health <= 0:
+		player_death()
 
 
 func game_menu_removed():
@@ -429,9 +445,6 @@ func mark_enemy():
 			leastAng = facingVec.angle_to(vec)
 			closestEn = ens[index]
 	
-	
-	
-	
 	if closestEn != null && closestEn != markedEn:
 		var newMark = marker.instance()
 		if markedEn != null:
@@ -443,6 +456,53 @@ func mark_enemy():
 	
 		#Set collision mask for HitForHoming
 		#$HitForHoming/CollisionShape.shape = markedEn.get_node("CollisionShape").shape
+
+
+func player_death():
+	#Sheath sword
+	var con
+	if swordInHand == "Left":
+		con = leftController
+	elif swordInHand == "Right":
+		con = rightController
+	if con != null:
+		var sword = con.get_node("GrippedSword")
+		if sword:
+			sword.queue_free()
+			swordSheathed = true
+	
+	#Change mode
+	userMode = uModes.Dead
+	
+	#Load death menu
+	var dMenu = deathMenu.instance()
+	print("Adding Death Menu")
+	add_child(dMenu)
+	print("DMenu at " + String(dMenu.global_transform.origin))
+	
+
+func _on_SheathArea_area_entered(area):
+	if userMode == uModes.Game:
+		if area.name == "MenuPresser":
+			var controllerParent = area.get_parent().get_parent()
+			if controllerParent == leftController:
+				handsReadytoDraw.Left = true
+			elif controllerParent == rightController:
+				handsReadytoDraw.Right = true
+		
+
+
+func _on_SheathArea_area_exited(area):
+	if userMode == uModes.Game:
+		if area.name == "MenuPresser":
+			var controllerParent = area.get_parent().get_parent()
+			if controllerParent == leftController:
+				handsReadytoDraw.Left = false
+			elif controllerParent == rightController:
+				handsReadytoDraw.Right = false
+	
+	
+
 	
 	
 	
@@ -575,23 +635,5 @@ func outside_mode_set(mode,node):
 		elif mode == uModes.Game:
 			userMode = mode
 
-
-func _on_SheathArea_area_entered(area):
-	if area.name == "MenuPresser":
-		var controllerParent = area.get_parent().get_parent()
-		if controllerParent == leftController:
-			handsReadytoDraw.Left = true
-		elif controllerParent == rightController:
-			handsReadytoDraw.Right = true
-		
-
-
-func _on_SheathArea_area_exited(area):
-	if area.name == "MenuPresser":
-		var controllerParent = area.get_parent().get_parent()
-		if controllerParent == leftController:
-			handsReadytoDraw.Left = false
-		elif controllerParent == rightController:
-			handsReadytoDraw.Right = false
 		
 	
