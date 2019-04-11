@@ -1,12 +1,10 @@
 TODO
-	Player health and death
-	Resize trees, give collision
-	Implement other enemies
 	Scoring system
-	Sounds for: Sheathing, enemy attack prep/execute
+	Sounds for: enemy attack prep/execute
 	Player heal and offensive ability (fireball, teleport, etc)
 
 MightDo
+	Implement more enemies
 	Enhanced visual effects
 	Enhanced sound effects
 	
