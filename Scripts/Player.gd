@@ -65,10 +65,12 @@ var availableAirDashes = GUST_DASH_MAX
 
 var homingDashReady = false
 
-var weaveType = {"Left":1,"Right":2}
+#var weaveType = {"Left":1,"Right":2}
+var weaveButtons = {"Left":false,"Right":false}
+var weaves
 var weaving = false
 var weaveSide = 0
-var weaveGain = -60
+#var weaveGain = -60
 
 var markedEn
 var markedEnName
@@ -168,39 +170,67 @@ func process_input(delta):
 	if userMode == uModes.Game:
 		#-------------------------------
 		#Weave-dashing
-		if weaving:
+		if weaveButtons.Left || weaveButtons.Right:
+			weaving = true
 			
-				
 			var headLog = vRGearPosLog.Head
 			var headMovVec = headLog[1] - headLog[0]
 			var facingVec = headset.global_transform.basis.z.normalized()
-			
 			
 			
 			var weaveCheckVec = Vector3(headMovVec.x,0,headMovVec.z)
 			var preRot = weaveCheckVec
 			weaveCheckVec = weaveCheckVec.rotated(Vector3(0,1,0),deg2rad(rotation_degrees.y))
 			
-			
-			var rightVec = facingVec.rotated(Vector3(0,1,0),deg2rad(90))
-			
-			var leftVec = facingVec.rotated(Vector3(0,1,0),deg2rad(-90))
-			
+			var forwardVec = headset.global_transform.basis.z.normalized() * -1
+			var rightVec = facingVec.rotated(Vector3(0,1,0),deg2rad(-90))
+			var leftVec = facingVec.rotated(Vector3(0,1,0),deg2rad(90))
 			var dBString = ""
 			
 			
 			var weAreWeaving = false;
 			if abs(headMovVec.length()) > .02:
 				
-				if rad2deg(weaveCheckVec.angle_to(rightVec)) < 45 || \
-				rad2deg(weaveCheckVec.angle_to(leftVec)) < 45:
-					if is_on_floor():
-						#print("gud")
-						weave_dash(weaveCheckVec,delta)
-						weAreWeaving = true
-						#Just play the sound
-						if !$Sounds/WeaveDash.playing:
-							$Sounds/WeaveDash.play()
+				#Decide weave mode
+				var mode
+				#Forward Weave
+				if weaveButtons.Left && weaveButtons.Right:
+					mode = "Forward"
+				else:
+					#Left Weave
+					if weaveButtons.Left:
+						mode = "Left"
+					#Right Weave
+					if weaveButtons.Right:
+						mode = "Right"
+				
+				#if rad2deg(weaveCheckVec.angle_to(rightVec)) < 45 || \
+				#rad2deg(weaveCheckVec.angle_to(leftVec)) < 45:
+				if is_on_floor():
+					var leftVecDifference = rad2deg(weaveCheckVec.angle_to(leftVec))
+					var rightVecDifference = rad2deg(weaveCheckVec.angle_to(rightVec))
+					
+					var dashVec
+					
+					if mode == "Left":
+						if leftVecDifference < 45:
+							dashVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(90))
+							weave_dash(dashVec,delta)
+					elif mode == "Right":
+						if rightVecDifference < 45:
+							dashVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(-90))
+							weave_dash(dashVec,delta)
+					elif mode == "Forward":
+						if rightVecDifference < 45 || leftVecDifference < 45:
+							weave_dash(forwardVec,delta)
+					
+					
+					weAreWeaving = true
+					
+					
+					#Just play the sound
+					if !$Sounds/WeaveDash.playing:
+						$Sounds/WeaveDash.play()
 			
 			
 			
@@ -401,7 +431,8 @@ func homing_gust(enemy):
 	vel = vec
 
 func weave_dash(dashVec,delta):
-	var vec = headset.global_transform.basis.z.normalized() * -1
+	#var vec = headset.global_transform.basis.z.normalized() * -1
+	var vec = dashVec
 	vec.y = 0
 	vec *= WEAVE_SPEED
 	vel += vec
@@ -556,11 +587,19 @@ func VR_con_pressed(controller,button,delta):
 		tugVec[tugIndex] = controller.translation#controller.global_transform.origin#controller.translation
 		tugVec[tugIndex + 1] = controller.translation#controller.global_transform.origin#controller.translation
 	elif button ==vRConButtons["NearButton"]:
+		#Decide weaving side (UNIMP)
+		if false:
+			if controller == leftController:
+				weaveSide = 1
+			elif controller == rightController:
+				weaveSide = 2
+		
 		if controller == leftController:
-			weaveSide = 1
+			weaveButtons.Left = true
 		elif controller == rightController:
-			weaveSide = 2
-		weaving = true;
+			weaveButtons.Right = true
+		
+		#weaving = true;
 	elif button == vRConButtons["FarButton"]:
 		
 		if userMode == uModes.Game:
@@ -583,7 +622,10 @@ func VR_con_released(controller,button,delta):
 		tugVec[tugIndex] = NON_USE_VECTOR
 		tugVec[tugIndex+1] = NON_USE_VECTOR
 	elif button ==vRConButtons["NearButton"]:
-		weaving = 0;
+		if controller == leftController:
+			weaveButtons.Left = false
+		elif controller == rightController:
+			weaveButtons.Right = false
 	elif button == vRConButtons["FarButton"]:
 		if controller == leftController:
 			loadGameMenu[0] = false

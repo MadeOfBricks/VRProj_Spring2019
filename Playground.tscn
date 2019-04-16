@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Packed/Enemies/ReaperDummy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Packed/Enemies/AggressiveReap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DefaultEnvironment.tres" type="Environment" id=2]
 [ext_resource path="res://Scripts/DebugTimer.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=4]
@@ -8,7 +8,6 @@
 [ext_resource path="res://Packed/Environment/Tree3.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=7]
 [ext_resource path="res://Packed/Player.tscn" type="PackedScene" id=8]
-
 
 [sub_resource type="AudioStreamRandomPitch" id=1]
 
@@ -80,7 +79,7 @@ _sections_unfolded = [ "Albedo" ]
 
 extents = Vector3( 1, 1, 1 )
 
-[node name="RootPlayground" type="Spatial"]
+[node name="RootPlayground" type="Spatial" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.20629, 0 )
 
@@ -88,7 +87,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.20629, 0 )
 
 [node name="Reap" parent="Enemies" index="0" instance=ExtResource( 1 )]
 
-transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -6.29706, 0, -5.48312 )
+transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -6.86345, 0.433093, -8.50337 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="1"]
 

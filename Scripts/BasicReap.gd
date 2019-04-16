@@ -114,11 +114,13 @@ func state_change(state,arg0 = null):
 		myState = state
 	elif state == states.MeleePrepare:
 		anim.play("Wind Back")
+		sounds.play("Prepare")
 		$Timers/AttackStart.start()
 		myState = state
 	elif state == states.MeleeAttack:
 		myState = state
 		anim.play("Swing")
+		sounds.play("Swing")
 		$Timers/AttackCooldown.start()
 		dash(attackTargetVec,ATTACK_DASH_SPEED,true)
 	elif state == states.AttackRecovery:
@@ -187,7 +189,8 @@ func sword_hit(hitVector):
 
 func destroy():
 	$CollisionShape.disabled = true
-	$Meshes.visible = false
+	#$Meshes.visible = false
+	anim.play("Death")
 	$Timers/RemoveTimer.start()
 
 func _on_RemoveTimer_timeout():
