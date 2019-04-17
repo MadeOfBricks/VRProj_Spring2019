@@ -1,7 +1,6 @@
 extends Spatial
 
-const SHEATH_FROM_HEAD_DIST = .3
-
+const SHEATH_FROM_HEAD_DIST = .4
 
 
 var headset

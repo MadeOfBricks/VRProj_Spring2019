@@ -114,11 +114,13 @@ func state_change(state,arg0 = null):
 		myState = state
 	elif state == states.MeleePrepare:
 		anim.play("Wind Back")
+		sounds.play("Prepare")
 		$Timers/AttackStart.start()
 		myState = state
 	elif state == states.MeleeAttack:
 		myState = state
 		anim.play("Swing")
+		sounds.play("Swing")
 		$Timers/AttackCooldown.start()
 		dash(attackTargetVec,ATTACK_DASH_SPEED,true)
 	elif state == states.AttackRecovery:
@@ -127,13 +129,14 @@ func state_change(state,arg0 = null):
 		#Save previous state
 		preFlinchState = myState
 		myState = state
-
+		
 		#Flinch Movement
 		var hitVector = arg0
 		var awayVec = $Meshes/Torso/Skull.global_transform.origin - \
 		player.get_node("ARVROrigin/ARVRCamera").global_transform.origin
 		var flinchVector = awayVec
-		dash(flinchVector,DASH_SPEED * .3,true)
+		if myMode != modes.Dummy:
+			dash(flinchVector,DASH_SPEED * .3,true)
 		var forwardVec = $Meshes.global_transform.basis.z.normalized()
 		var rightVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(-90))
 		var leftVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(90))
@@ -145,6 +148,8 @@ func state_change(state,arg0 = null):
 			anim.play(anims[0])
 		else:
 			anim.play(anims[1])
+		
+		print("Playing anim " + anim.assigned_animation)
 
 		#Reset timers
 		$Timers.reset_all()
@@ -153,7 +158,8 @@ func state_change(state,arg0 = null):
 		$Timers/FlinchRecover.start()
 
 		#Decrement Health
-		health-= 1
+		if myMode != modes.Dummy:
+			health-= 1
 		sounds.play("Hit")
 		if health <= 0:
 			destroy()
@@ -188,6 +194,7 @@ func sword_hit(hitVector):
 func destroy():
 	$CollisionShape.disabled = true
 	$Meshes.visible = false
+	#anim.play("Death")
 	$Timers/RemoveTimer.start()
 
 func _on_RemoveTimer_timeout():

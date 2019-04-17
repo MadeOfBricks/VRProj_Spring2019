@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Packed/Enemies/ReaperDummy.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DefaultEnvironment.tres" type="Environment" id=2]
@@ -6,9 +6,9 @@
 [ext_resource path="res://Assets/Sounds/Nocturnal (8 Bit Jazz).ogg" type="AudioStream" id=4]
 [ext_resource path="res://Packed/Environment/Tree2.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Packed/Environment/Tree3.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=7]
-[ext_resource path="res://Packed/Player.tscn" type="PackedScene" id=8]
-
+[ext_resource path="res://Packed/Environment/PlaygroundTerrainBlock.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Assets/Textures/Texture2.png" type="Texture" id=8]
+[ext_resource path="res://Packed/Player.tscn" type="PackedScene" id=9]
 
 [sub_resource type="AudioStreamRandomPitch" id=1]
 
@@ -47,7 +47,7 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = ExtResource( 7 )
+albedo_texture = ExtResource( 8 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
@@ -88,7 +88,19 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.20629, 0 )
 
 [node name="Reap" parent="Enemies" index="0" instance=ExtResource( 1 )]
 
-transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -6.29706, 0, -5.48312 )
+transform = Transform( 0.0751199, 0, 0.185356, 0, 0.2, 0, -0.185356, 0, 0.0751199, -12.7573, 0, -19.4046 )
+
+[node name="Reap2" parent="Enemies" index="1" instance=ExtResource( 1 )]
+
+transform = Transform( -0.102025, 0, -0.17202, 0, 0.2, 0, 0.17202, 0, -0.102025, 33.1294, 0, -25.7442 )
+
+[node name="Reap3" parent="Enemies" index="2" instance=ExtResource( 1 )]
+
+transform = Transform( -0.0498668, 0, 0.193684, 0, 0.2, 0, -0.193684, 0, -0.0498668, 23.3011, -3.8147e-006, 24.7288 )
+
+[node name="Reap4" parent="Enemies" index="3" instance=ExtResource( 1 )]
+
+transform = Transform( 0.0872068, 0, 0.179986, 0, 0.2, 0, -0.179986, 0, 0.0872068, -3.75777, -2.86102e-006, 8.26261 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="1"]
 
@@ -146,17 +158,178 @@ bus = "Master"
 
 [node name="EnvironmentFeatures" type="Spatial" parent="." index="4"]
 
+editor/display_folded = true
+
 [node name="Tree2" parent="EnvironmentFeatures" index="0" instance=ExtResource( 5 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.757128, 0, 5.52251 )
+transform = Transform( 2.16721, 0, -2.07442, 0, 3, 0, 2.07442, 0, 2.16721, 0, 0, 14.1976 )
 
-[node name="Tree3" parent="EnvironmentFeatures" index="1" instance=ExtResource( 6 )]
+[node name="Tree18" parent="EnvironmentFeatures" index="1" instance=ExtResource( 5 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.154 )
+transform = Transform( 2.16721, 0, -2.07442, 0, 3, 0, 2.07442, 0, 2.16721, 10.9175, -1.90735e-006, 35.7172 )
+
+[node name="Tree25" parent="EnvironmentFeatures" index="2" instance=ExtResource( 5 )]
+
+transform = Transform( 1.04667, 0, -2.81149, 0, 3, 0, 2.81149, 0, 1.04667, -14.7942, -3.8147e-006, 35.4082 )
+
+[node name="Tree21" parent="EnvironmentFeatures" index="3" instance=ExtResource( 5 )]
+
+transform = Transform( 2.49524, 0, 1.66546, 0, 3, 0, -1.66546, 0, 2.49524, 32.8237, -1.90735e-006, 3.71621 )
+
+[node name="Tree23" parent="EnvironmentFeatures" index="4" instance=ExtResource( 5 )]
+
+transform = Transform( 2.97162, 0, 0.411694, 0, 3, 0, -0.411694, 0, 2.97162, 18.8675, -3.8147e-006, 16.1512 )
+
+[node name="Tree6" parent="EnvironmentFeatures" index="5" instance=ExtResource( 5 )]
+
+transform = Transform( -0.525804, 0, -2.95356, 0, 3, 0, 2.95356, 0, -0.525804, -29.4915, 0, -3.33277 )
+
+[node name="Tree20" parent="EnvironmentFeatures" index="6" instance=ExtResource( 5 )]
+
+transform = Transform( -0.525804, 0, -2.95356, 0, 3, 0, 2.95356, 0, -0.525804, -18.574, -1.90735e-006, 18.1868 )
+
+[node name="Tree27" parent="EnvironmentFeatures" index="7" instance=ExtResource( 5 )]
+
+transform = Transform( -1.7603, 0, -2.42927, 0, 3, 0, 2.42927, 0, -1.7603, -33.6993, -3.8147e-006, 6.77852 )
+
+[node name="Tree22" parent="EnvironmentFeatures" index="8" instance=ExtResource( 5 )]
+
+transform = Transform( 2.76911, 0, -1.15414, 0, 3, 0, 1.15414, 0, 2.76911, 9.31182, -1.90735e-006, 28.7014 )
+
+[node name="Tree24" parent="EnvironmentFeatures" index="9" instance=ExtResource( 5 )]
+
+transform = Transform( 1.98944, 0, -2.24547, 0, 3, 0, 2.24547, 0, 1.98944, -13.1822, -3.8147e-006, 28.3939 )
+
+[node name="Tree5" parent="EnvironmentFeatures" index="10" instance=ExtResource( 5 )]
+
+transform = Transform( 2.48501, 0, 1.6807, 0, 3, 0, -1.6807, 0, 2.48501, 9.9099, -9.53674e-007, 10.7912 )
+
+[node name="Tree19" parent="EnvironmentFeatures" index="11" instance=ExtResource( 5 )]
+
+transform = Transform( 2.48501, 0, 1.6807, 0, 3, 0, -1.6807, 0, 2.48501, 20.8274, -2.86102e-006, 32.3108 )
+
+[node name="Tree26" parent="EnvironmentFeatures" index="12" instance=ExtResource( 5 )]
+
+transform = Transform( 2.96904, 0, 0.429864, 0, 3, 0, -0.429864, 0, 2.96904, -4.39025, -4.76837e-006, 36.6606 )
+
+[node name="Tree11" parent="EnvironmentFeatures" index="13" instance=ExtResource( 5 )]
+
+transform = Transform( -1.10146, 0, 2.79048, 0, 3, 0, -2.79048, 0, -1.10146, 20.7311, -9.53674e-007, -28.2163 )
+
+[node name="Tree7" parent="EnvironmentFeatures" index="14" instance=ExtResource( 5 )]
+
+transform = Transform( 2.77612, 0, -1.13718, 0, 3, 0, 1.13718, 0, 2.77612, -21.1644, -9.53674e-007, 3.02867 )
+
+[node name="Tree15" parent="EnvironmentFeatures" index="15" instance=ExtResource( 5 )]
+
+transform = Transform( 1.71245, 0, 2.46323, 0, 3, 0, -2.46323, 0, 1.71245, 6.41101, -9.53674e-007, 0.43335 )
+
+[node name="Tree3" parent="EnvironmentFeatures" index="16" instance=ExtResource( 6 )]
+
+transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 12.1881, 0, -15.4176 )
+
+[node name="Tree13" parent="EnvironmentFeatures" index="17" instance=ExtResource( 6 )]
+
+transform = Transform( 0.650942, 0, 2.92853, 0, 3, 0, -2.92853, 0, 0.650942, -4.35898, 0, -36.127 )
+
+[node name="Tree8" parent="EnvironmentFeatures" index="18" instance=ExtResource( 6 )]
+
+transform = Transform( 1.66247, 0, -2.49724, 0, 3, 0, 2.49724, 0, 1.66247, 1.91468, 0, -9.59871 )
+
+[node name="Tree12" parent="EnvironmentFeatures" index="19" instance=ExtResource( 6 )]
+
+transform = Transform( 2.79847, 0, 1.08101, 0, 3, 0, -1.08101, 0, 2.79847, -0.907837, 0, -24.8357 )
+
+[node name="Tree14" parent="EnvironmentFeatures" index="20" instance=ExtResource( 6 )]
+
+transform = Transform( -2.72524, 0, 1.25422, 0, 3, 0, -1.25422, 0, -2.72524, -2.72206, -9.53674e-007, -6.40892 )
+
+[node name="Tree9" parent="EnvironmentFeatures" index="21" instance=ExtResource( 6 )]
+
+transform = Transform( 2.7918, 0, 1.09811, 0, 3, 0, -1.09811, 0, 2.7918, -20.6623, -9.53674e-007, -28.9926 )
+
+[node name="PlaygroundTerrainBlock" parent="EnvironmentFeatures" index="22" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16.3092, 0.676003, -11.868 )
+
+[node name="PlaygroundTerrainBlock5" parent="EnvironmentFeatures" index="23" instance=ExtResource( 7 )]
+
+transform = Transform( 0.626261, 0, 0.779614, 0, 1, 0, -0.779614, 0, 0.626261, 6.46761, 0.676005, -19.5772 )
+
+[node name="PlaygroundTerrainBlock11" parent="EnvironmentFeatures" index="24" instance=ExtResource( 7 )]
+
+transform = Transform( 0.626261, 0, 0.779614, 0, 1, 0, -0.779614, 0, 0.626261, 9.31617, 0.676005, 18.9169 )
+
+[node name="PlaygroundTerrainBlock13" parent="EnvironmentFeatures" index="25" instance=ExtResource( 7 )]
+
+transform = Transform( -0.911144, 0, 0.412088, 0, 1, 0, -0.412088, 0, -0.911144, -20.5285, 0.676001, 35.0267 )
+
+[node name="PlaygroundTerrainBlock17" parent="EnvironmentFeatures" index="26" instance=ExtResource( 7 )]
+
+transform = Transform( -0.911144, 0, 0.412088, 0, 1, 0, -0.412088, 0, -0.911144, -23.6714, 0.676001, -7.19399 )
+
+[node name="PlaygroundTerrainBlock3" parent="EnvironmentFeatures" index="27" instance=ExtResource( 7 )]
+
+transform = Transform( 0.506198, 0, -0.862417, 0, 1, 0, 0.862417, 0, 0.506198, 0.702277, 0.676003, -3.65398 )
+
+[node name="PlaygroundTerrainBlock7" parent="EnvironmentFeatures" index="28" instance=ExtResource( 7 )]
+
+transform = Transform( 0.989364, 0, -0.145459, 0, 1, 0, 0.145459, 0, 0.989364, 23.525, 0.676005, -27.6954 )
+
+[node name="PlaygroundTerrainBlock9" parent="EnvironmentFeatures" index="29" instance=ExtResource( 7 )]
+
+transform = Transform( 0.989364, 0, -0.145459, 0, 1, 0, 0.145459, 0, 0.989364, 26.3735, 0.676005, 10.7986 )
+
+[node name="PlaygroundTerrainBlock15" parent="EnvironmentFeatures" index="30" instance=ExtResource( 7 )]
+
+transform = Transform( -0.105827, 0, 0.994385, 0, 1, 0, -0.994385, 0, -0.105827, -32.6434, 0.676001, 20.5323 )
+
+[node name="PlaygroundTerrainBlock20" parent="EnvironmentFeatures" index="31" instance=ExtResource( 7 )]
+
+transform = Transform( -0.105827, 0, 0.994385, 0, 1, 0, -0.994385, 0, -0.105827, -35.7864, 0.676001, -21.6884 )
+
+[node name="PlaygroundTerrainBlock2" parent="EnvironmentFeatures" index="32" instance=ExtResource( 7 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.51164, 0.676003, 0.633781 )
+
+[node name="PlaygroundTerrainBlock6" parent="EnvironmentFeatures" index="33" instance=ExtResource( 7 )]
+
+transform = Transform( 0.626261, 0, 0.779614, 0, 1, 0, -0.779614, 0, 0.626261, 21.0975, 0.676005, -17.8269 )
+
+[node name="PlaygroundTerrainBlock12" parent="EnvironmentFeatures" index="34" instance=ExtResource( 7 )]
+
+transform = Transform( 0.626261, 0, 0.779614, 0, 1, 0, -0.779614, 0, 0.626261, 23.946, 0.676005, 20.6672 )
+
+[node name="PlaygroundTerrainBlock14" parent="EnvironmentFeatures" index="35" instance=ExtResource( 7 )]
+
+transform = Transform( -0.911144, 0, 0.412088, 0, 1, 0, -0.412088, 0, -0.911144, -22.4813, 0.676001, 20.4225 )
+
+[node name="PlaygroundTerrainBlock19" parent="EnvironmentFeatures" index="36" instance=ExtResource( 7 )]
+
+transform = Transform( -0.911144, 0, 0.412088, 0, 1, 0, -0.412088, 0, -0.911144, -25.6243, 0.676001, -21.7982 )
+
+[node name="PlaygroundTerrainBlock4" parent="EnvironmentFeatures" index="37" instance=ExtResource( 7 )]
+
+transform = Transform( 0.506198, 0, -0.862417, 0, 1, 0, 0.862417, 0, 0.506198, -6.13238, 0.676003, 9.39911 )
+
+[node name="PlaygroundTerrainBlock8" parent="EnvironmentFeatures" index="38" instance=ExtResource( 7 )]
+
+transform = Transform( 0.989364, 0, -0.145459, 0, 1, 0, 0.145459, 0, 0.989364, 29.4211, 0.676005, -14.1924 )
+
+[node name="PlaygroundTerrainBlock10" parent="EnvironmentFeatures" index="39" instance=ExtResource( 7 )]
+
+transform = Transform( 0.989364, 0, -0.145459, 0, 1, 0, 0.145459, 0, 0.989364, 32.2696, 0.676005, 24.3016 )
+
+[node name="PlaygroundTerrainBlock16" parent="EnvironmentFeatures" index="40" instance=ExtResource( 7 )]
+
+transform = Transform( -0.105827, 0, 0.994385, 0, 1, 0, -0.994385, 0, -0.105827, -21.037, 0.676001, 11.4556 )
+
+[node name="PlaygroundTerrainBlock18" parent="EnvironmentFeatures" index="41" instance=ExtResource( 7 )]
+
+transform = Transform( -0.105827, 0, 0.994385, 0, 1, 0, -0.994385, 0, -0.105827, -24.18, 0.676001, -30.7651 )
 
 [node name="LevGround" type="StaticBody" parent="." index="5"]
 
-editor/display_folded = true
 transform = Transform( 40, 0, 0, 0, 0.25, 0, 0, 0, 40, 0, 0, 0 )
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -192,7 +365,7 @@ shape = SubResource( 4 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
-[node name="Player" parent="." index="6" instance=ExtResource( 8 )]
+[node name="Player" parent="." index="6" instance=ExtResource( 9 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.07286, 0 )
 

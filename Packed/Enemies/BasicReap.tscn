@@ -1,72 +1,19 @@
 [gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Scripts/BasicReap.gd" type="Script" id=1]
-[ext_resource path="res://Assets/Models/Reap/scythe.obj" type="ArrayMesh" id=2]
-[ext_resource path="res://Assets/Models/Reap/Hand_RHold.obj" type="ArrayMesh" id=3]
-[ext_resource path="res://Assets/Models/Reap/Hand_LHold.obj" type="ArrayMesh" id=4]
-[ext_resource path="res://Assets/Models/Reap/cloak.obj" type="ArrayMesh" id=5]
-[ext_resource path="res://Assets/Models/Reap/skull.obj" type="ArrayMesh" id=6]
+[ext_resource path="res://Assets/Animations/ReapFlinchL.tres" type="Animation" id=2]
+[ext_resource path="res://Assets/Animations/ReapIdle.tres" type="Animation" id=3]
+[ext_resource path="res://Assets/Models/Reap/scythe.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://Assets/Textures/UnpressButtonl.tres" type="Material" id=5]
+[ext_resource path="res://Assets/Models/Reap/Hand_RHold.obj" type="ArrayMesh" id=6]
 [ext_resource path="res://Assets/Textures/BoneTexture.tres" type="Material" id=7]
-[ext_resource path="res://Scripts/EntitySounds.gd" type="Script" id=8]
-[ext_resource path="res://Assets/Sounds/BlockHit.wav" type="AudioStream" id=9]
-[ext_resource path="res://Scripts/TimersManager.gd" type="Script" id=10]
+[ext_resource path="res://Assets/Models/Reap/Hand_LHold.obj" type="ArrayMesh" id=8]
+[ext_resource path="res://Assets/Models/Reap/cloak.obj" type="ArrayMesh" id=9]
+[ext_resource path="res://Assets/Models/Reap/skull.obj" type="ArrayMesh" id=10]
+[ext_resource path="res://Packed/ReaperSounds.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scripts/TimersManager.gd" type="Script" id=12]
 
 [sub_resource type="Animation" id=1]
-
-resource_name = "FlinchL"
-length = 0.3
-loop = false
-step = 0.1
-tracks/0/type = "value"
-tracks/0/path = NodePath("Meshes/GripHelper:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0.0435477, 4.83901, 1.79948 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Meshes/GripHelper:rotation_degrees")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 43.5754, 17.0447, 3.99318 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Meshes/Torso:translation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 0.1, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 7.23221, 0 ), Vector3( 0.647412, 7.23221, -1.93331 ), Vector3( 0, 7.23221, 0 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("Meshes/Torso:rotation_degrees")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0, 0.1, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( -6.45028, -24.1329, 0 ), Vector3( 0, 0, 0 ) ]
-}
-
-[sub_resource type="Animation" id=2]
 
 resource_name = "FlinchR"
 length = 0.8
@@ -121,49 +68,7 @@ tracks/3/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( -6.45028, 24.1329, 0 ), Vector3( 0, 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=3]
-
-length = 0.01
-loop = false
-step = 0.05
-tracks/0/type = "value"
-tracks/0/path = NodePath("Meshes/GripHelper:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0.0435477, 4.83901, 1.79948 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Meshes/GripHelper:rotation_degrees")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 43.5754, 17.0447, 3.99318 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Meshes/Torso:rotation_degrees")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ) ]
-}
-
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 
 length = 0.4
 loop = false
@@ -205,7 +110,7 @@ tracks/2/keys = {
 "values": [ Vector3( 17.4454, 0, 0 ), Vector3( 0, 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 
 length = 0.1
 loop = false
@@ -247,7 +152,7 @@ tracks/2/keys = {
 "values": [ Vector3( -17.4454, 0, 0 ), Vector3( 17.4454, 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=4]
 
 resource_name = "SwingEnd"
 length = 0.01
@@ -290,7 +195,7 @@ tracks/2/keys = {
 "values": [ Vector3( 17.4454, 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=5]
 
 length = 0.4
 loop = false
@@ -344,24 +249,24 @@ tracks/3/keys = {
 "values": [ Vector3( 0, 7.23221, 0 ) ]
 }
 
-[sub_resource type="CapsuleShape" id=8]
+[sub_resource type="CapsuleShape" id=6]
 
 radius = 3.0
 height = 8.0
 
-[sub_resource type="BoxShape" id=9]
+[sub_resource type="BoxShape" id=7]
 
 extents = Vector3( 3.5, 0.4, 0.1 )
 
-[sub_resource type="BoxShape" id=10]
+[sub_resource type="BoxShape" id=8]
 
 extents = Vector3( 4, 1, 0.1 )
 
-[sub_resource type="BoxShape" id=11]
+[sub_resource type="BoxShape" id=9]
 
 extents = Vector3( 4, 1, 0.1 )
 
-[sub_resource type="SpatialMaterial" id=12]
+[sub_resource type="SpatialMaterial" id=10]
 
 render_priority = 0
 flags_transparent = false
@@ -411,9 +316,9 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo" ]
+_sections_unfolded = [ "Albedo", "Flags" ]
 
-[node name="Reap" type="StaticBody" groups=[
+[node name="Reap" type="StaticBody" index="0" groups=[
 "hitable",
 ]]
 
@@ -436,20 +341,20 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 0.5
-anims/FlinchL = SubResource( 1 )
-anims/FlinchR = SubResource( 2 )
-anims/Idle = SubResource( 3 )
-"anims/Resume Idle" = SubResource( 4 )
-anims/Swing = SubResource( 5 )
-anims/SwingEnd = SubResource( 6 )
-"anims/Wind Back" = SubResource( 7 )
+anims/FlinchL = ExtResource( 2 )
+anims/FlinchR = SubResource( 1 )
+anims/Idle = ExtResource( 3 )
+"anims/Resume Idle" = SubResource( 2 )
+anims/Swing = SubResource( 3 )
+anims/SwingEnd = SubResource( 4 )
+"anims/Wind Back" = SubResource( 5 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 6.46464, 0 )
-shape = SubResource( 8 )
+shape = SubResource( 6 )
 disabled = false
 _sections_unfolded = [ "Transform" ]
 
@@ -457,8 +362,8 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="GripHelper" type="Spatial" parent="Meshes" index="0"]
 
-transform = Transform( 0.967826, 0.134979, 0.212354, 0.0504503, 0.722709, -0.689309, -0.246513, 0.677844, 0.692647, 0.0435477, 4.83901, 1.79948 )
-_sections_unfolded = [ "Transform" ]
+transform = Transform( 0.967826, 0.134979, 0.212354, 0.0504503, 0.722709, -0.689309, -0.246513, 0.677844, 0.692647, 0.0435477, 5.69717, 0.828352 )
+_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Scythe" type="MeshInstance" parent="Meshes/GripHelper" index="0"]
 
@@ -472,10 +377,10 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 2 )
+mesh = ExtResource( 4 )
 skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
+material/0 = ExtResource( 5 )
+_sections_unfolded = [ "Transform", "material" ]
 
 [node name="ScytheBlade" type="Area" parent="Meshes/GripHelper/Scythe" index="0"]
 
@@ -504,25 +409,25 @@ reverb_bus_uniformity = 0.0
 [node name="CollisionShape" type="CollisionShape" parent="Meshes/GripHelper/Scythe/ScytheBlade" index="0"]
 
 transform = Transform( 0.837918, 0.818692, 1.52779e-009, -0.363863, 0.837918, 2.3298e-008, 1.24541e-008, -3.30255e-009, 1, 4.04504, 0.191361, 0.120884 )
-shape = SubResource( 9 )
+shape = SubResource( 7 )
 disabled = false
 
 [node name="CollisionShape2" type="CollisionShape" parent="Meshes/GripHelper/Scythe/ScytheBlade" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, -2.96062e-016, 1.77636e-015, 1.18424e-015, 1, -2.79808, 1.71446, 0.0368843 )
-shape = SubResource( 10 )
+shape = SubResource( 8 )
 disabled = false
 
 [node name="CollisionShape3" type="CollisionShape" parent="Meshes/GripHelper/Scythe/ScytheBlade" index="2"]
 
 transform = Transform( -0.00568899, -0.638003, 4.72412e-008, 1.02275, -0.0205199, -4.66719e-008, -1.58332e-008, 6.65541e-008, 1, -7.30909, -3.30978, 0.945982 )
-shape = SubResource( 11 )
+shape = SubResource( 9 )
 disabled = false
 
 [node name="HandR" type="Spatial" parent="Meshes/GripHelper" index="1"]
 
-editor/display_folded = true
 transform = Transform( -0.5, 5.96046e-008, -0.866026, 0.866026, 1.49012e-008, -0.5, -1.21072e-008, -1, -1.49012e-007, -4.42498, 0.215388, 0.387585 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="Mesh" type="MeshInstance" parent="Meshes/GripHelper/HandR" index="0"]
 
@@ -536,15 +441,15 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 3 )
+mesh = ExtResource( 6 )
 skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
+material/0 = ExtResource( 7 )
+_sections_unfolded = [ "Transform", "material" ]
 
 [node name="HandL" type="Spatial" parent="Meshes/GripHelper" index="2"]
 
-editor/display_folded = true
 transform = Transform( 0.642788, -0.0667652, -0.76313, 0.766045, 0.0560227, 0.640342, 5.96046e-008, -0.996195, 0.0871558, 2.91117, -0.0434604, 0.610493 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="Mesh" type="MeshInstance" parent="Meshes/GripHelper/HandL" index="0"]
 
@@ -558,9 +463,10 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 4 )
+mesh = ExtResource( 8 )
 skeleton = NodePath("..")
-material/0 = null
+material/0 = ExtResource( 7 )
+_sections_unfolded = [ "material" ]
 
 [node name="Torso" type="Spatial" parent="Meshes" index="1"]
 
@@ -579,9 +485,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 5 )
+mesh = ExtResource( 9 )
 skeleton = NodePath("..")
-material/0 = SubResource( 12 )
+material/0 = SubResource( 10 )
 _sections_unfolded = [ "material" ]
 
 [node name="Skull" type="MeshInstance" parent="Meshes/Torso" index="1"]
@@ -596,34 +502,12 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 6 )
+mesh = ExtResource( 10 )
 skeleton = NodePath("..")
 material/0 = ExtResource( 7 )
 _sections_unfolded = [ "material" ]
 
-[node name="Sounds" type="Spatial" parent="." index="3"]
-
-script = ExtResource( 8 )
-
-[node name="Hit" type="AudioStreamPlayer3D" parent="Sounds" index="0"]
-
-stream = ExtResource( 9 )
-attenuation_model = 0
-unit_db = 0.0
-unit_size = 1.0
-max_db = 3.0
-pitch_scale = 1.0
-autoplay = false
-max_distance = 0.0
-out_of_range_mode = 0
-bus = "Master"
-area_mask = 1
-emission_angle_enabled = false
-emission_angle_degrees = 45.0
-emission_angle_filter_attenuation_db = -12.0
-attenuation_filter_cutoff_hz = 5000.0
-attenuation_filter_db = -24.0
-doppler_tracking = 0
+[node name="Sounds" parent="." index="3" instance=ExtResource( 11 )]
 
 [node name="MarkerPoint" type="Spatial" parent="." index="4"]
 
@@ -636,7 +520,7 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Timers" type="Spatial" parent="." index="6"]
 
-script = ExtResource( 10 )
+script = ExtResource( 12 )
 
 [node name="DashCooldown" type="Timer" parent="Timers" index="0"]
 

@@ -1,0 +1,57 @@
+[gd_resource type="Animation" format=2]
+
+[resource]
+
+resource_name = "FlinchR"
+length = 0.8
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Meshes/GripHelper:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0.0435477, 4.83901, 1.79948 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Meshes/GripHelper:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 43.5754, 17.0447, 3.99318 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Meshes/Torso:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 7.23221, 0 ), Vector3( -0.943238, 7.23221, -1.93331 ), Vector3( 0, 7.23221, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Meshes/Torso:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.1, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( -6.45028, 24.1329, 0 ), Vector3( 0, 0, 0 ) ]
+}
+
