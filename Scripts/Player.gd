@@ -6,7 +6,7 @@ var root
 const GRAVITY = -24.8
 const MAX_SPEED = 20
 const JUMP_SPEED = 14
-const GUST_DASH_SPEED = 10
+const GUST_DASH_SPEED = 11
 const GUST_DASH_MAX = 1
 const WEAVE_SPEED = 10
 const WEAVE_SIDE_SPEED = 5
@@ -419,6 +419,9 @@ func game_menu_removed():
 	loadedGameMenu = null
 	userMode = uModes.Game
 
+func set_hands_visible(setBool):
+	$ARVROrigin/OVRControllerLeft/Hand.visible = setBool
+	$ARVROrigin/OVRControllerRight/Hand.visible = setBool
 
 func start_hit_float():
 	moveState = "hitFloat"
@@ -450,10 +453,8 @@ func gust_dash(dashVec,delta):
 		vec *= magnitude * -1
 		vec = vec.rotated(Vector3(0,1,0),rotation.y)
 		
-		if vel.y < 0:
-			vel.y = 0
 		
-		vel += vec
+		vel = vec
 	
 
 func _on_AirDashTimer_timeout():
@@ -559,6 +560,7 @@ func VR_con_pressed(controller,button,delta):
 			if canConGrab:
 				var newSword = packedSword.instance()
 				con.add_child(newSword)
+				con.get_node("Hand").visible = false
 				swordSheathed = false
 				swordInHand = swordString
 				sounds.play("SwordDraw")
@@ -576,6 +578,7 @@ func VR_con_pressed(controller,button,delta):
 			
 			if canConSheathe:
 				var sword = con.get_node("GrippedSword")
+				con.get_node("Hand").visible = true
 				sword.queue_free()
 				swordSheathed = true
 				sounds.play("SwordSheath")

@@ -318,7 +318,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Flags" ]
 
-[node name="Reap" type="StaticBody" index="0" groups=[
+[node name="Reap" type="StaticBody" groups=[
 "hitable",
 ]]
 

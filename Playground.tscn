@@ -158,8 +158,6 @@ bus = "Master"
 
 [node name="EnvironmentFeatures" type="Spatial" parent="." index="4"]
 
-editor/display_folded = true
-
 [node name="Tree2" parent="EnvironmentFeatures" index="0" instance=ExtResource( 5 )]
 
 transform = Transform( 2.16721, 0, -2.07442, 0, 3, 0, 2.07442, 0, 2.16721, 0, 0, 14.1976 )

@@ -207,7 +207,7 @@ extents = Vector3( 0.6, 0.6, 0.3 )
 radius = 0.5
 height = 1.0
 
-[node name="Player" type="KinematicBody" index="0"]
+[node name="Player" type="KinematicBody"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.84789, 0 )
 input_ray_pickable = true
@@ -300,7 +300,7 @@ script = SubResource( 4 )
 
 [node name="Hand" parent="ARVROrigin/OVRControllerLeft" index="1" instance=ExtResource( 4 )]
 
-transform = Transform( 0.007, 0, -6.11959e-010, -5.02068e-010, 0.00400225, -0.00574299, -3.49888e-010, -0.00574299, -0.00400225, 0.0770014, 0.0714912, 0.162523 )
+transform = Transform( 0.007, 0, -6.11959e-010, -5.67544e-010, 0.00261812, -0.00649195, -2.28883e-010, -0.00649195, -0.00261812, 0.0770014, 0.065731, 0.144537 )
 
 [node name="OVRControllerRight" parent="ARVROrigin" index="2" instance=ExtResource( 3 )]
 
@@ -310,7 +310,7 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Hand" parent="ARVROrigin/OVRControllerRight" index="1" instance=ExtResource( 4 )]
 
-transform = Transform( -0.007, 0, -6.11959e-010, 5.02068e-010, 0.00400225, -0.00574299, 3.49888e-010, -0.00574299, -0.00400225, -0.0534475, 0.0695876, 0.163983 )
+transform = Transform( -0.007, 0, -6.11959e-010, 5.67544e-010, 0.00261812, -0.00649195, 2.28883e-010, -0.00649195, -0.00261812, -0.0534475, 0.0661768, 0.141511 )
 
 [node name="Sheath" type="Spatial" parent="ARVROrigin" index="3"]
 

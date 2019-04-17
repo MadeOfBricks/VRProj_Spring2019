@@ -90,6 +90,9 @@ func level_reset():
 	player.translation = Vector3(0,3.9,0)
 	player.vel = Vector3(0,0,0)
 	
+	#Set player hands visible
+	player.set_hands_visible(true)
+	
 	#Load pre-wave menu
 	var thisMenu = preWaveMenu.instance()
 	$PreWavePos.add_child(thisMenu)

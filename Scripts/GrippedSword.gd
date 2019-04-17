@@ -5,7 +5,7 @@ const VALID_FRAMES_CHECKED = 10
 const VALID_FRAME_PERCENT_REQUIRED = .5
 const TRANSFORM_LOG_SIZE = 15
 const HIT_INDEX_MAX = 10
-const REQUIRED_HAND_TRAVEL_DISTANCE = .24
+const REQUIRED_HAND_TRAVEL_DISTANCE = .18
 
 
 var hitBody
@@ -70,7 +70,6 @@ func _on_Blade_body_exited(body):
 		
 		print("Out of " + String(framesChecked) + " frames checked")
 		print(String(validFrames) + " valid frames")
-		print(String(validFrames/framesChecked) + " frames valid")
 		
 		var handDistance = (handTranslationLog[framesChecked] - handTranslationLog[0]).length()
 		

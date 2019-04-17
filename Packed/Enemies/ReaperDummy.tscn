@@ -345,7 +345,7 @@ tracks/3/keys = {
 
 [sub_resource type="CapsuleShape" id=8]
 
-radius = 3.0
+radius = 2.2
 height = 8.0
 
 [sub_resource type="BoxShape" id=9]
