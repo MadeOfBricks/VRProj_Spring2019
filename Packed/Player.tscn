@@ -207,7 +207,7 @@ extents = Vector3( 0.6, 0.6, 0.3 )
 radius = 0.5
 height = 1.0
 
-[node name="Player" type="KinematicBody"]
+[node name="Player" type="KinematicBody" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.84789, 0 )
 input_ray_pickable = true

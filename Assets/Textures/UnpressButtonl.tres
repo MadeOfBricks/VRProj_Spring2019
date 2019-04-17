@@ -3,7 +3,7 @@
 [resource]
 
 render_priority = 0
-flags_transparent = true
+flags_transparent = false
 flags_unshaded = false
 flags_vertex_lighting = false
 flags_no_depth_test = false

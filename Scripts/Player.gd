@@ -6,9 +6,10 @@ var root
 const GRAVITY = -24.8
 const MAX_SPEED = 20
 const JUMP_SPEED = 14
-const GUST_DASH_SPEED = 15
+const GUST_DASH_SPEED = 10
 const GUST_DASH_MAX = 1
 const WEAVE_SPEED = 10
+const WEAVE_SIDE_SPEED = 5
 const GUST_DASH_TUG_MIN = .4
 const HOMING_DASH_SPEED = 30
 const HOMING_DISTANCE_RANGE_MAX = 15
@@ -215,14 +216,14 @@ func process_input(delta):
 					if mode == "Left":
 						if leftVecDifference < 45:
 							dashVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(90))
-							weave_dash(dashVec,delta)
+							weave_dash(dashVec,WEAVE_SIDE_SPEED, delta)
 					elif mode == "Right":
 						if rightVecDifference < 45:
 							dashVec = forwardVec.rotated(Vector3(0,1,0),deg2rad(-90))
-							weave_dash(dashVec,delta)
+							weave_dash(dashVec,WEAVE_SIDE_SPEED, delta)
 					elif mode == "Forward":
 						if rightVecDifference < 45 || leftVecDifference < 45:
-							weave_dash(forwardVec,delta)
+							weave_dash(forwardVec,WEAVE_SPEED,delta)
 					
 					
 					weAreWeaving = true
@@ -430,11 +431,11 @@ func homing_gust(enemy):
 	vec *= HOMING_DASH_SPEED
 	vel = vec
 
-func weave_dash(dashVec,delta):
+func weave_dash(dashVec, speed, delta):
 	#var vec = headset.global_transform.basis.z.normalized() * -1
 	var vec = dashVec
 	vec.y = 0
-	vec *= WEAVE_SPEED
+	vec *= speed
 	vel += vec
 
 
@@ -449,8 +450,10 @@ func gust_dash(dashVec,delta):
 		vec *= magnitude * -1
 		vec = vec.rotated(Vector3(0,1,0),rotation.y)
 		
+		if vel.y < 0:
+			vel.y = 0
 		
-		vel = vec
+		vel += vec
 	
 
 func _on_AirDashTimer_timeout():
