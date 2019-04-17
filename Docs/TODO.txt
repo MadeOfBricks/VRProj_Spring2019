@@ -1,8 +1,8 @@
 TODO
-	Scoring system
 	Player heal and offensive ability (fireball, teleport, etc)
 
 MightDo
+	Implement more enemies
 	Enhanced visual effects
 	Enhanced sound effects
 	
