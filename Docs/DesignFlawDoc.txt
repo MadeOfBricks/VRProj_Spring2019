@@ -1,2 +1,9 @@
 We are rotating the entire player node in the code when we could have just rotated a spacial node that was a parent of the ARVR origin
   This is why we have to compensate for rotation in weave dash and such
+
+Don't have a universal tracked input map. Would make press and release and process_input easier
+  Current functions on press and release aren't the worst, but it could be made more elegant
+
+Motions for back-forth sword attacks aren't as natural as I had hoped
+  Maybe fists would have been better
+

@@ -4,7 +4,12 @@ A player's hand gains gleam when either it touches a hand with gleam already, or
 
 
 Gleam powers
-	Breaker fist
+	Breaker fist(?)
+		Punch in direction of enemy
+		Warp to them and instant kill
+	Gleam cannon
+		Place one hand behind another, aim palm at enemy
+			Homes in on marked enemy
 	Restore
 		Use once per round
 		

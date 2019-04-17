@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/hand-free.obj-13d6ee741fadd45f017d1a8e33cea8f1.mesh"
+
+[deps]
+
+files=[ "res://.import/hand-free.obj-13d6ee741fadd45f017d1a8e33cea8f1.mesh" ]
+
+source_file="res://Assets/Models/hand-free.obj"
+dest_files=[ "res://.import/hand-free.obj-13d6ee741fadd45f017d1a8e33cea8f1.mesh", "res://.import/hand-free.obj-13d6ee741fadd45f017d1a8e33cea8f1.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

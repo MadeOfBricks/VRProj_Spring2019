@@ -1,0 +1,60 @@
+Presentation
+Intro
+	Who here has played a VR game?
+	Which one? x3
+
+Simple, spoken, no powerpoint
+	What I set out to do
+		What VR games can do
+			Physical immersion and engagement
+		
+		What I wanted to do with that
+			Fun combat
+			Bit of a workout
+
+Demonstrate In Playground
+	"Now for the part of the presentation that some of you may have been anticipating: The part
+	where I wobble back and forth and flail my arms around wearing VR equipment."
+	
+	Movemement-heavy combat in a crowd
+		What is the closest we can get to DMC in VR?
+	The mechanics that do that
+		Basics
+			Tracks hands and hands
+			Need to face the sensors
+				Sticks turn in 45 degree snaps
+				Looks jarring on the screen
+		Mechanics engage player physically
+			Sword that has to be swung "right"
+				Most games, you can waggle a sword
+				Here, I track hand movement and movement of blade relative to its edge
+			Pushing gust dash
+				Have to move hands certain distance
+			Homing dash
+				Half of a gust dash
+			Ground movement
+				Weaving dash requires side-to-side-movement
+		
+		Test the player's physical limits
+			Waves escalate in difficulty
+
+The main game
+	"Now, I will drop into simple procedural environments where the trees and blocks are
+	placed procedurally."
+	"When I hit this button, I will start fighting one enemy"
+	(does that)
+	"Now two"
+	(does that)
+	"Now three"
+	(does that)
+	"And onwards"
+	(Afterwards)
+	"I'm not a swordsman, and I'm no exercise scientist, but I know that I have fun and work up a 
+	sweat when I playtest this for extended periods of time"
+
+The process
+	Focus was on function, not form
+		Simplistic menus, no vfx, basic animation, simple sword
+
+Some issues
+	Unable to implement certain player abilities
