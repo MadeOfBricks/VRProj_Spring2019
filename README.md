@@ -6,3 +6,5 @@ https://youtu.be/hZD1iGMYgfo
 Progress video 2:
 https://youtu.be/iCHazgUvA7I
 
+Final progress video:
+https://youtu.be/UYLIN4ugVdU
